@@ -1,0 +1,26 @@
+stages:
+  basic:
+    level: 1
+    armor: 0
+    color: WHITE
+    enchantments: none
+  good:
+    level: 5
+    armor: 2
+    color: YELLOW
+    enchantments: none
+  better:
+    level: 10
+    armor: 4
+    color: GOLD
+    enchantments: none
+  great:
+    level: 15
+    armor: 6
+    color: RED
+    enchantments: none
+  best:
+    level: 20
+    armor: 8
+    color: AQUA
+    enchantments: none

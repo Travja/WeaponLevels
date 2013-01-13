@@ -1,0 +1,8 @@
+name: WeaponLevels
+author: InnoKo
+main: me.innoko.weaponlevels.WL
+version: 1.2.2 DEV
+commands:
+  wl:
+    description: The main command.
+    usage: /<command>

@@ -1,0 +1,64 @@
+weapons:
+    WOOD_SWORD: Wooden Sword
+    STONE_SWORD: Stone Sword
+    IRON_SWORD: Iron Sword
+    GOLD_SWORD: Golden Sword
+    DIAMOND_SWORD: Diamond Sword
+armor:
+    LEATHER_HELMET: Leather Cap
+    LEATHER_CHESTPLATE: Leather Tunic
+    LEATHER_LEGGINGS: Leather Pants
+    LEATHER_BOOTS: Leather Boots
+    
+    IRON_HELMET: Iron Helmet
+    IRON_CHESTPLATE: Iron Chestplate
+    IRON_LEGGINGS: Iron Leggings
+    IRON_BOOTS: Iron Boots
+    
+    GOLD_HELMET: Golden Helmet
+    GOLD_CHESTPLATE: Golden Chestplate
+    GOLD_LEGGINGS: Golden Leggings
+    GOLD_BOOTS: Golden Boots
+    
+    CHAINMAIL_HELMET: Chain Helmet
+    CHAINMAIL_CHESTPLATE: Chain Chestplate
+    CHAINMAIL_LEGGINGS: Chain Leggings
+    CHAINMAIL_BOOTS: Chain Boots
+    
+    DIAMOND_HELMET: Diamond Helmet
+    DIAMOND_CHESTPLATE: Diamond Chestplate
+    DIAMOND_LEGGINGS: Diamond Leggings
+    DIAMOND_BOOTS: Diamond Boots
+tools:
+    WOOD_PICKAXE: Wooden Pickaxe
+    WOOD_AXE: Wooden Axe
+    WOOD_SPADE: Wooden Shovel
+    WOOD_HOE: Wooden Hoe
+    
+    STONE_PICKAXE: Stone Pickaxe
+    STONE_AXE: Stone Axe
+    STONE_SPADE: Stone Shovel
+    STONE_HOE: Stone Hoe
+    
+    IRON_PICKAXE: Iron Pickaxe
+    IRON_AXE: Iron Axe
+    IRON_SPADE: Iron Shovel
+    IRON_HOE: Iron Hoe
+    
+    GOLD_PICKAXE: Golden Pickaxe
+    GOLD_AXE: Golden Axe
+    GOLD_SPADE: Golden Shovel
+    GOLD_HOE: Golden Hoe
+    
+    DIAMOND_PICKAXE: Diamond Pickaxe
+    DIAMOND_AXE: Diamond Axe
+    DIAMOND_SPADE: Diamond Shovel
+    DIAMOND_HOE: Diamond Hoe
+correct tools:
+    PICKAXE: 1,14,15,16,21,24,49,56,73,74,87,89,121,129
+    AXE: 17
+    SPADE: 2,3,12,60,80,82,88
+    HOE: 2,3
+items:
+    REDSTONE_TORCH_ON: Redstone Torch
+    REDSTONE_TORCH_OFF: Redstone Torch
