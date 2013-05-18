@@ -1,7 +1,7 @@
 name: WeaponLevels
-author: InnoKo
-main: me.innoko.weaponlevels.WL
-version: 1.2.2 DEV
+author: TheRealNovus
+main: com.coffeecup.novus.weaponlevels.WLPlugin
+version: 1.2.2
 commands:
   wl:
     description: The main command.

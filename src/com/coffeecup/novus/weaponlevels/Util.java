@@ -1,4 +1,4 @@
-package me.innoko.weaponlevels;
+package com.coffeecup.novus.weaponlevels;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,7 +54,7 @@ public class Util
 	{
 		int exp = 0;
 
-		expBar = expBar.substring(3, expBar.length() - 3); // Remove brackets
+		expBar = expBar.substring(4, expBar.length() - 3); // Remove brackets
 
 		String[] lines = expBar.split("\\|");
 

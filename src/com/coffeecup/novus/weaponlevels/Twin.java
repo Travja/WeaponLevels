@@ -1,4 +1,4 @@
-package me.innoko.weaponlevels;
+package com.coffeecup.novus.weaponlevels;
 
 public class Twin<O1>
 {

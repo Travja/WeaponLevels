@@ -31,3 +31,4 @@ general:
         player: 50
     disabled items: none
     disable mob spawners: true
+    allow stacks: false

@@ -1,22 +1,23 @@
-package me.innoko.weaponlevels.configuration;
+package com.coffeecup.novus.weaponlevels.configuration;
 
 import java.io.IOException;
 
-import me.innoko.weaponlevels.ToolType;
-import me.innoko.weaponlevels.Util;
-import me.innoko.weaponlevels.WL;
-import me.innoko.weaponlevels.WeaponType;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import com.coffeecup.novus.weaponlevels.ToolType;
+import com.coffeecup.novus.weaponlevels.Util;
+import com.coffeecup.novus.weaponlevels.WLPlugin;
+import com.coffeecup.novus.weaponlevels.WeaponType;
+
 public class ItemChecker
 {
 	private static YamlConfiguration names = null;
 
-	public static void loadItems(WL plugin)
+	public static void loadItems(WLPlugin plugin)
 	{
 		names = new YamlConfiguration();
 
@@ -39,7 +40,7 @@ public class ItemChecker
 	 *            - The material of the item to check
 	 * @return True if the item is a weapon.
 	 */
-	public static boolean isWeapon(WL plugin, Material material)
+	public static boolean isWeapon(WLPlugin plugin, Material material)
 	{
 		if (names == null)
 		{
@@ -58,7 +59,7 @@ public class ItemChecker
 	 *            - The material of the item to check
 	 * @return True if the item is armor.
 	 */
-	public static boolean isArmor(WL plugin, Material material)
+	public static boolean isArmor(WLPlugin plugin, Material material)
 	{
 		if (names == null)
 		{
@@ -77,7 +78,7 @@ public class ItemChecker
 	 *            - The material of the item to check
 	 * @return True if the item is a tool.
 	 */
-	public static boolean isTool(WL plugin, Material material)
+	public static boolean isTool(WLPlugin plugin, Material material)
 	{
 		if (names == null)
 		{
@@ -98,7 +99,7 @@ public class ItemChecker
 	 *            - The tool to check
 	 * @return True if the tool is the proper tool for the block.
 	 */
-	public static boolean isCorrectTool(WL plugin, ToolType tool, Block block)
+	public static boolean isCorrectTool(WLPlugin plugin, ToolType tool, Block block)
 	{
 		if (names == null)
 		{
@@ -119,7 +120,7 @@ public class ItemChecker
 	 *            - The material to get the name of
 	 * @return The in-game name of the item.
 	 */
-	public static String getInGameName(WL plugin, Material material)
+	public static String getInGameName(WLPlugin plugin, Material material)
 	{
 		if (isWeapon(plugin, material))
 		{
@@ -139,7 +140,7 @@ public class ItemChecker
 		}
 	}
 
-	public static WeaponType getWeaponType(WL plugin, Material material)
+	public static WeaponType getWeaponType(WLPlugin plugin, Material material)
 	{
 		if (isWeapon(plugin, material))
 		{

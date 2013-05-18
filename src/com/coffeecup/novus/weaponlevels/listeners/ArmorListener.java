@@ -1,11 +1,5 @@
-package me.innoko.weaponlevels.listeners;
+package com.coffeecup.novus.weaponlevels.listeners;
 
-import me.innoko.weaponlevels.Util;
-import me.innoko.weaponlevels.WL;
-import me.innoko.weaponlevels.Weapon;
-import me.innoko.weaponlevels.WeaponType;
-import me.innoko.weaponlevels.configuration.Config;
-import me.innoko.weaponlevels.configuration.ItemChecker;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,11 +7,18 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.coffeecup.novus.weaponlevels.Util;
+import com.coffeecup.novus.weaponlevels.WLPlugin;
+import com.coffeecup.novus.weaponlevels.Weapon;
+import com.coffeecup.novus.weaponlevels.WeaponType;
+import com.coffeecup.novus.weaponlevels.configuration.Config;
+import com.coffeecup.novus.weaponlevels.configuration.ItemChecker;
+
 public class ArmorListener implements Listener
 {
-	private WL plugin;
+	private WLPlugin plugin;
 
-	public ArmorListener(WL instance)
+	public ArmorListener(WLPlugin instance)
 	{
 		plugin = instance;
 	}

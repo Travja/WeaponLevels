@@ -1,8 +1,9 @@
-package me.innoko.weaponlevels;
+package com.coffeecup.novus.weaponlevels;
 
-import me.innoko.weaponlevels.configuration.Config;
 
 import org.bukkit.configuration.file.YamlConfiguration;
+
+import com.coffeecup.novus.weaponlevels.configuration.Config;
 
 public enum WeaponType
 {

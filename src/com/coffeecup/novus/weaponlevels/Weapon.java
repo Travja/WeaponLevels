@@ -1,19 +1,22 @@
-package me.innoko.weaponlevels;
+package com.coffeecup.novus.weaponlevels;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import me.innoko.weaponlevels.configuration.Config;
-import me.innoko.weaponlevels.configuration.ItemChecker;
 
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.coffeecup.novus.weaponlevels.configuration.Config;
+import com.coffeecup.novus.weaponlevels.configuration.ItemChecker;
+
 public class Weapon
 {
-	private WL plugin;
+	public static final String codeSeq = "▲";
+	
+	private WLPlugin plugin;
 
 	private int level;
 	private int experience;
@@ -23,9 +26,9 @@ public class Weapon
 	private ItemStack itemStack;
 	private ItemMeta meta;
 
-	public WeaponType type;
+	public WeaponType type;	
 
-	public Weapon(WL instance, ItemStack item)
+	public Weapon(WLPlugin instance, ItemStack item)
 	{
 		this.plugin = instance;
 
@@ -34,13 +37,13 @@ public class Weapon
 			level = 1;
 			experience = 0;
 
-			if (!item.hasItemMeta())
+			if (item.hasItemMeta())
 			{
-				name = ItemChecker.getInGameName(plugin, item.getType()) + " *";
+				name = item.getItemMeta().getDisplayName();
 			}
 			else
 			{
-				name = item.getItemMeta().getDisplayName() + " *";
+				name = ItemChecker.getInGameName(plugin, item.getType());
 			}
 
 			lore = new ArrayList<String>();
@@ -55,9 +58,9 @@ public class Weapon
 
 			name = meta.getDisplayName();
 			lore = meta.getLore();
-			level = Integer.valueOf(Util.searchListForString(lore, "Level", "Level 1").split(" ")[1]);
+			level = Integer.valueOf(Util.searchListForString(lore, codeSeq + "Level", "Level 1").split(" ")[1]);
 			experience = Util.readExperience(
-					Util.searchListForString(lore, "EXP", Util.createExpBar(100, 0, 5)).substring(7), 5,
+					Util.searchListForString(lore, codeSeq + "EXP", Util.createExpBar(100, 0, 5)).substring(7), 5,
 					ChatColor.WHITE, ChatColor.GRAY);
 		}
 
@@ -71,7 +74,9 @@ public class Weapon
 
 		ItemMeta meta = item.getItemMeta();
 
-		if (meta.getDisplayName().endsWith("*"))
+		String search = Util.searchListForString(meta.getLore(), codeSeq, "false");
+		
+		if (search != "false")
 			return true;
 		else
 			return false;
@@ -94,6 +99,12 @@ public class Weapon
 
 	public void addExperience(int amount)
 	{
+		// Prevent stacks from gaining xp
+		if (!Config.ALLOW_STACKS && itemStack.getAmount() > 1)
+		{
+			return;
+		}
+		
 		experience += amount;
 
 		if (experience >= 100)
@@ -112,9 +123,10 @@ public class Weapon
 	{
 		level++;
 
-		if (level > 20)
+		if (level > Config.MAX_LEVEL)
 		{
-			level = 20;
+			level = Config.MAX_LEVEL;
+			experience = 100;
 		}
 	}
 
@@ -166,8 +178,8 @@ public class Weapon
 	public void update()
 	{
 		lore.clear();
-		lore.add(ChatColor.GRAY + "Level " + level);
-		lore.add(ChatColor.GRAY + "EXP: " + Util.createExpBar(100, experience, 5));
+		lore.add(ChatColor.GRAY + "▲Level " + level);
+		lore.add(ChatColor.GRAY + "▲EXP: " + Util.createExpBar(100, experience, 5));
 
 		meta.setLore(lore);
 		meta.setDisplayName(Config.getColor(type, getLevelStats()) + ChatColor.stripColor(name));

@@ -1,4 +1,4 @@
-package me.innoko.weaponlevels.configuration;
+package com.coffeecup.novus.weaponlevels.configuration;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,11 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import me.innoko.weaponlevels.LevelStats;
-import me.innoko.weaponlevels.Twin;
-import me.innoko.weaponlevels.Util;
-import me.innoko.weaponlevels.WL;
-import me.innoko.weaponlevels.WeaponType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,6 +13,12 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+
+import com.coffeecup.novus.weaponlevels.LevelStats;
+import com.coffeecup.novus.weaponlevels.Twin;
+import com.coffeecup.novus.weaponlevels.Util;
+import com.coffeecup.novus.weaponlevels.WLPlugin;
+import com.coffeecup.novus.weaponlevels.WeaponType;
 
 public class Config
 {
@@ -32,6 +33,7 @@ public class Config
 	public static int EXP_ON_LEVEL;
 	public static int EXP_PER_HIT;
 	public static boolean DISABLE_SPAWNERS;
+	public static boolean ALLOW_STACKS;
 
 	public static int getLevel(WeaponType type, LevelStats stats)
 	{
@@ -98,18 +100,18 @@ public class Config
 		return list;
 	}
 
-	public static void loadOptionConfig(WL plugin) throws IOException, InvalidConfigurationException
+	public static void loadOptionConfig(WLPlugin plugin) throws IOException, InvalidConfigurationException
 	{
 		loadConfig(plugin, OPTIONCONFIG, "config.yml");
 	}
 
-	public static void loadWeaponConfig(WL plugin, WeaponType type) throws IOException,
+	public static void loadWeaponConfig(WLPlugin plugin, WeaponType type) throws IOException,
 			InvalidConfigurationException
 	{
 		loadConfig(plugin, type.config, type.filename);
 	}
 
-	public static void loadConfig(WL plugin, YamlConfiguration config, String filename) throws IOException,
+	public static void loadConfig(WLPlugin plugin, YamlConfiguration config, String filename) throws IOException,
 			InvalidConfigurationException
 	{
 		File folder = plugin.getDataFolder();
@@ -132,7 +134,7 @@ public class Config
 		config.save(configFile);
 	}
 
-	public static void loadConfigValues(WL plugin)
+	public static void loadConfigValues(WLPlugin plugin)
 	{
 		FileConfiguration config = OPTIONCONFIG;
 
@@ -141,6 +143,7 @@ public class Config
 		EXP_ON_LEVEL = config.getInt("general.experience on level up");
 		EXP_PER_HIT = config.getInt("general.experience per hit");
 		DISABLE_SPAWNERS = config.getBoolean("general.disable mob spawners");
+		ALLOW_STACKS = config.getBoolean("general.allow stacks");
 
 		if (EXP_PER_HIT < 5)
 		{
@@ -175,7 +178,7 @@ public class Config
 		return list;
 	}
 
-	public static int getDeathExperience(WL plugin, EntityType type)
+	public static int getDeathExperience(WLPlugin plugin, EntityType type)
 	{
 		String name = type.name().replace('_', ' ').toLowerCase();
 		int exp = plugin.getConfig().getInt("general.experience per kill." + name);
@@ -186,7 +189,7 @@ public class Config
 			return 6;
 	}
 
-	public static boolean isItemEnabled(WL plugin, int typeId)
+	public static boolean isItemEnabled(WLPlugin plugin, int typeId)
 	{
 		String disabledItems = plugin.getConfig().getString("general.disabled items");
 

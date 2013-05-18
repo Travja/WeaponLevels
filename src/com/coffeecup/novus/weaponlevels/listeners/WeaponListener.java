@@ -1,11 +1,7 @@
-package me.innoko.weaponlevels.listeners;
+package com.coffeecup.novus.weaponlevels.listeners;
 
 import java.util.HashMap;
 
-import me.innoko.weaponlevels.Util;
-import me.innoko.weaponlevels.WL;
-import me.innoko.weaponlevels.Weapon;
-import me.innoko.weaponlevels.configuration.Config;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -18,13 +14,18 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.coffeecup.novus.weaponlevels.Util;
+import com.coffeecup.novus.weaponlevels.WLPlugin;
+import com.coffeecup.novus.weaponlevels.Weapon;
+import com.coffeecup.novus.weaponlevels.configuration.Config;
+
 public class WeaponListener implements Listener
 {
-	private WL plugin;
+	private WLPlugin plugin;
 
 	private HashMap<Entity, Weapon> arrows;
 
-	public WeaponListener(WL instance)
+	public WeaponListener(WLPlugin instance)
 	{
 		plugin = instance;
 
