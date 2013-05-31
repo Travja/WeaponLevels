@@ -13,6 +13,7 @@ import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 
 import com.coffeecup.novus.weaponlevels.LevelStats;
 import com.coffeecup.novus.weaponlevels.Twin;
@@ -27,13 +28,17 @@ public class Config
 	public static YamlConfiguration ARMORCONFIG = new YamlConfiguration();
 	public static YamlConfiguration TOOLCONFIG = new YamlConfiguration();
 	public static YamlConfiguration ITEMCONFIG = new YamlConfiguration();
-
+	
+	public static boolean PERMS_TO_LEVEL;
+	public static boolean PERMS_TO_USE;
 	public static int MAX_LEVEL;
 	public static boolean NON_WEAPONS_ENABLED;
 	public static int EXP_ON_LEVEL;
 	public static int EXP_PER_HIT;
 	public static boolean DISABLE_SPAWNERS;
 	public static boolean ALLOW_STACKS;
+	
+	public static boolean USE_RPG;
 
 	public static int getLevel(WeaponType type, LevelStats stats)
 	{
@@ -70,7 +75,7 @@ public class Config
 
 		return config.getInt("stages." + stats.name().toLowerCase() + ".damage");
 	}
-
+	
 	public static ChatColor getColor(WeaponType type, LevelStats stats)
 	{
 		if (type.config == null)
@@ -138,6 +143,8 @@ public class Config
 	{
 		FileConfiguration config = OPTIONCONFIG;
 
+		PERMS_TO_LEVEL = config.getBoolean("general.require permissions for leveling items");
+		PERMS_TO_USE = config.getBoolean("general.require permissions for using items");
 		MAX_LEVEL = config.getInt("general.maximum level");
 		NON_WEAPONS_ENABLED = config.getBoolean("general.normal items enabled");
 		EXP_ON_LEVEL = config.getInt("general.experience on level up");

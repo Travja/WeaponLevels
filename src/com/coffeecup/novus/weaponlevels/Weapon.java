@@ -9,6 +9,8 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import think.rpgitems.item.RPGItem;
+
 import com.coffeecup.novus.weaponlevels.configuration.Config;
 import com.coffeecup.novus.weaponlevels.configuration.ItemChecker;
 
@@ -40,6 +42,11 @@ public class Weapon
 			if (item.hasItemMeta())
 			{
 				name = item.getItemMeta().getDisplayName();
+				
+				if (name == null)
+				{
+					name = ItemChecker.getInGameName(plugin, item.getType());
+				}
 			}
 			else
 			{
@@ -57,7 +64,7 @@ public class Weapon
 			meta = itemStack.getItemMeta();
 
 			name = meta.getDisplayName();
-			lore = meta.getLore();
+			lore = (ArrayList<String>) meta.getLore();
 			level = Integer.valueOf(Util.searchListForString(lore, codeSeq + "Level", "Level 1").split(" ")[1]);
 			experience = Util.readExperience(
 					Util.searchListForString(lore, codeSeq + "EXP", Util.createExpBar(100, 0, 5)).substring(7), 5,
@@ -177,6 +184,27 @@ public class Weapon
 
 	public void update()
 	{
+		if (Config.USE_RPG)
+		{
+			RPGItem rpg = plugin.toRPGItem(itemStack);
+			
+			if (rpg == null)
+			{
+				updateNormal();
+			}
+			else
+			{
+				updateRPG(rpg);
+			}
+		}
+		else 
+		{
+			updateNormal();
+		}
+	}
+	
+	public void updateNormal()
+	{
 		lore.clear();
 		lore.add(ChatColor.GRAY + "▲Level " + level);
 		lore.add(ChatColor.GRAY + "▲EXP: " + Util.createExpBar(100, experience, 5));
@@ -186,6 +214,33 @@ public class Weapon
 
 		itemStack.setItemMeta(meta);
 
+		applyEnchantments(getLevelStats());
+	}
+	 
+	public void updateRPG(RPGItem rpg)
+	{
+		lore = rpg.getTooltipLines("en_GB");
+		lore = lore.subList(1, lore.size());
+		
+		int levelID = Util.searchListForStringID(lore, codeSeq + "Level", -1);
+		if (levelID != -1)
+		{
+			lore.remove(levelID);
+		}
+		
+		int expID = Util.searchListForStringID(lore, codeSeq + "EXP", -1);
+		if (expID != -1)
+		{
+			lore.remove(expID);
+		}
+		
+		lore.add(ChatColor.GRAY + "▲Level " + level);
+		lore.add(ChatColor.GRAY + "▲EXP: " + Util.createExpBar(100, experience, 5));
+		
+		meta.setLore(lore);
+		
+		itemStack.setItemMeta(meta);
+		
 		applyEnchantments(getLevelStats());
 	}
 }

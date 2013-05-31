@@ -19,7 +19,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 
 import com.coffeecup.novus.weaponlevels.Util;
-import com.coffeecup.novus.weaponlevels.WLPlugin;
 
 public class BlockChecker
 {

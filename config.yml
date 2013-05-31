@@ -1,4 +1,6 @@
 general:
+    require permissions for leveling items: false
+    require permissions for using items: false
     maximum level: 20
     normal items enabled: true
     experience on level up: 10

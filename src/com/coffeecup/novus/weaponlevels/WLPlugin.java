@@ -1,28 +1,26 @@
 package com.coffeecup.novus.weaponlevels;
 
-import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import com.coffeecup.novus.weaponlevels.listeners.ArmorListener;
+import com.coffeecup.novus.weaponlevels.listeners.CommandListener;
+import com.coffeecup.novus.weaponlevels.listeners.EventListener;
 import com.coffeecup.novus.weaponlevels.listeners.ToolListener;
 import com.coffeecup.novus.weaponlevels.listeners.WeaponListener;
 
-import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import think.rpgitems.api.RPGItems;
+import think.rpgitems.item.RPGItem;
 
 import com.coffeecup.novus.weaponlevels.configuration.BlockChecker;
 import com.coffeecup.novus.weaponlevels.configuration.Config;
@@ -31,22 +29,50 @@ import com.coffeecup.novus.weaponlevels.configuration.ItemChecker;
 public class WLPlugin extends JavaPlugin
 {
 	public PluginManager pm;
-
+	public PluginDescriptionFile pdf;
 	public Logger log;
 
-	public List<LivingEntity> spawnedMobs;	
-
+	public List<LivingEntity> spawnedMobs;
+	
+	public WeaponListener weaponListener;
+	public ToolListener toolListener;
+	public ArmorListener armorListener;
+	public EventListener eventListener;
+	public CommandListener cmdListener;
+	
+	public RPGItems rpgItems;
+	
 	@Override
 	public void onEnable()
 	{
 		pm = getServer().getPluginManager();
+		pdf = getDescription();
 		log = Logger.getLogger("Minecraft");
-
-		pm.registerEvents(new WeaponListener(this), this);
-		pm.registerEvents(new ToolListener(this), this);
-		pm.registerEvents(new ArmorListener(this), this);
-
+		
 		spawnedMobs = new ArrayList<LivingEntity>();
+		
+		weaponListener = new WeaponListener(this);
+		toolListener = new ToolListener(this);
+		armorListener = new ArmorListener(this);
+		eventListener = new EventListener(this);
+		cmdListener = new CommandListener(this);
+
+		pm.registerEvents(weaponListener, this);
+		pm.registerEvents(toolListener, this);
+		pm.registerEvents(armorListener, this);
+		pm.registerEvents(eventListener, this);
+		
+		getCommand("wl").setExecutor(cmdListener);
+		
+		Config.USE_RPG = pm.getPlugin("RPG Items") != null;
+		rpgItems = new RPGItems();
+		
+		if (Config.USE_RPG)
+		{
+			log.warning("RPG ITEMS DETECTED. ITEMS CREATED BY RPG ITEMS WILL CURRENTLY NOT WORK WITH THIS PLUGIN.");
+		}
+		
+		PermissionManager.BPERMISSIONS = pm.getPlugin("bPermissions") != null;
 
 		try
 		{
@@ -59,7 +85,7 @@ public class WLPlugin extends JavaPlugin
 
 		ItemChecker.loadItems(this);
 
-		log.info("WeaponLevels by TheRealNovus is now enabled!");
+		log.info("WeaponLevels v" + pdf.getVersion() + " by " + pdf.getAuthors() + " is now enabled!");
 	}
 	
 	@Override
@@ -68,7 +94,30 @@ public class WLPlugin extends JavaPlugin
 		log.info("Storing player-placed blocks...");
 		BlockChecker.saveBlockStore();
 
-		log.info("WeaponLevels by TheRealNovus is now disabled.");
+		log.info("WeaponLevels v" + pdf.getVersion() + " by " + pdf.getAuthors() + " is now disabled.");
+	}
+	
+	public void onReload()
+	{
+		log.info("Reloading WeaponLevels v" + pdf.getVersion() +"...");
+		
+		log.info("Storing player-placed blocks...");
+		BlockChecker.saveBlockStore();
+		
+		log.info("Loading plugin data...");
+		try
+		{
+			loadData();
+		}
+		catch (IOException | InvalidConfigurationException e)
+		{
+			e.printStackTrace();
+		}
+		
+		log.info("Loading item data...");
+		ItemChecker.loadItems(this);	
+		
+		log.info("WeaponLevels has successfully reloaded.");
 	}
 
 	private void loadData() throws IOException, InvalidConfigurationException
@@ -108,6 +157,16 @@ public class WLPlugin extends JavaPlugin
 
 		BlockChecker.loadBlockStore(dataPath);
 	}
-
-
+	
+	public RPGItem toRPGItem(ItemStack itemstack)
+	{
+		if (Config.USE_RPG)
+		{
+			return rpgItems.toRPGItem(itemstack);
+		}
+		else
+		{
+			return null;
+		}
+	}
 }

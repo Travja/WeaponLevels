@@ -2,6 +2,7 @@ package com.coffeecup.novus.weaponlevels;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -162,7 +163,7 @@ public class Util
 	}
 
 	/**
-	 * Searches the list for the a string that starts with the specified string.
+	 * Searches the list for a string that starts with the specified string.
 	 * 
 	 * @param list
 	 *            - The list to search in.
@@ -175,6 +176,8 @@ public class Util
 	 */
 	public static String searchListForString(List<String> list, String string, String def)
 	{
+		if (list == null) return def;
+		
 		for (String s : list)
 		{
 			if (ChatColor.stripColor(s).startsWith(ChatColor.stripColor(string)))
@@ -183,6 +186,35 @@ public class Util
 			}
 		}
 
+		return def;
+	}
+	
+	/**
+	 * Searches the list for the index of a string that starts with the specified string.
+	 * 
+	 * @param list
+	 *            - The list to search in.
+	 * @param string
+	 *            - The string to search for.
+	 * @param def
+	 *            - The default index to return if no string was found.
+	 * @return The index of the string, or def if no string was found.
+	 */
+	public static int searchListForStringID(List<String> list, String string, int def)
+	{
+		if (list == null) return def;
+		
+		ListIterator<String> i = list.listIterator();
+		
+		while (i.hasNext())
+		{
+			String s = i.next();
+			if (ChatColor.stripColor(s).startsWith(ChatColor.stripColor(string)))
+			{
+				return i.nextIndex() - 1;
+			}
+		}
+		
 		return def;
 	}
 }

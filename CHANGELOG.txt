@@ -1,0 +1,16 @@
+==== Source Changes: ====
+* + Added CHANGELOG.txt
+* + Added README.txt (still empty lol)
+* - Removed README (no filetype extension)
+* - Removed a lot of unused imports
+* ~ Seperated listener initialization from the register methods
+* ~ Enable and Disable messages now grab author and version from plugin.yml instead of hardcoding
+
+==== Game Changes: ====
+* + Added commands "/wl version" and "/wl reload"
+* + Added support for SuperPerms-based permission plugins
+* + Added partial support for RPG Items (still much to do)
+* - Removed console spam
+* - Removed bugs with enchanted items
+* - Removed bug where some items' names changed to "null"
+* ~ Fixed problem where spawners were not allowed regardless of config

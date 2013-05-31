@@ -3,9 +3,11 @@ package com.coffeecup.novus.weaponlevels.listeners;
 import java.util.HashMap;
 
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
@@ -14,6 +16,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 
+import com.coffeecup.novus.weaponlevels.PermissionManager;
 import com.coffeecup.novus.weaponlevels.Util;
 import com.coffeecup.novus.weaponlevels.WLPlugin;
 import com.coffeecup.novus.weaponlevels.Weapon;
@@ -32,7 +35,7 @@ public class WeaponListener implements Listener
 		arrows = new HashMap<Entity, Weapon>();
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
 	{
 		if (event.getDamager() instanceof Player)
@@ -59,22 +62,42 @@ public class WeaponListener implements Listener
 				}
 			}
 
-			Weapon weapon = new Weapon(plugin, item);
+			Weapon weapon = plugin.eventListener.tempWeaponStorage.get(player);
+			
+			boolean addExperience = true;
+			
+			if (!PermissionManager.hasPermission(player, weapon.getLevelStats().name()))
+			{
+				if (Config.PERMS_TO_USE)
+				{
+					player.sendMessage(ChatColor.RED + "This weapon's level is too high for you to use!");
+					event.setCancelled(true);
+					return;
+				}
+				
+				if (Config.PERMS_TO_LEVEL)
+				{
+					addExperience = false;
+				}
+			}
 
 			event.setDamage(event.getDamage() + Config.getDamage(weapon.type, weapon.getLevelStats()));
-
-			if (plugin.spawnedMobs.contains(event.getEntity()))
+			
+			if (Config.DISABLE_SPAWNERS && plugin.spawnedMobs.contains(event.getEntity()))
 			{
 				return;
 			}
 
-			int levelState = weapon.getLevel();
-			weapon.addExperience(Config.EXP_PER_HIT);
-			weapon.update();
-
-			if (weapon.getLevel() > levelState)
+			if (addExperience)
 			{
-				Util.dropExperience(player.getLocation(), Config.EXP_ON_LEVEL, 3);
+				int levelState = weapon.getLevel();
+				weapon.addExperience(Config.EXP_PER_HIT);
+				weapon.update();
+	
+				if (weapon.getLevel() > levelState)
+				{
+					Util.dropExperience(player.getLocation(), Config.EXP_ON_LEVEL, 3);
+				}
 			}
 		}
 		else
@@ -85,7 +108,7 @@ public class WeaponListener implements Listener
 
 				event.setDamage(event.getDamage() + Config.getDamage(weapon.type, weapon.getLevelStats()));
 
-				if (plugin.spawnedMobs.contains(event.getEntity()))
+				if (Config.DISABLE_SPAWNERS && plugin.spawnedMobs.contains(event.getEntity()))
 				{
 					return;
 				}
@@ -104,7 +127,7 @@ public class WeaponListener implements Listener
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDeath(EntityDeathEvent event)
 	{
 		if (plugin.spawnedMobs.contains(event.getEntity()))
@@ -127,7 +150,12 @@ public class WeaponListener implements Listener
 				if (item == null || item.getTypeId() == 0 || !Config.isItemEnabled(plugin, item.getTypeId()))
 					return;
 
-				Weapon weapon = new Weapon(plugin, item);
+				Weapon weapon = plugin.eventListener.tempWeaponStorage.get(player);
+				
+				if (Config.PERMS_TO_LEVEL && !PermissionManager.hasPermission(player, weapon.getLevelStats().name()))
+				{					
+					return;
+				}
 
 				int levelState = weapon.getLevel();
 				weapon.addExperience(Config.getDeathExperience(plugin, event.getEntity().getType()));
@@ -141,7 +169,7 @@ public class WeaponListener implements Listener
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onCreatureSpawn(CreatureSpawnEvent event)
 	{
 		if (Config.DISABLE_SPAWNERS && event.getSpawnReason() == SpawnReason.SPAWNER)
@@ -150,7 +178,7 @@ public class WeaponListener implements Listener
 		}
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityShootBow(EntityShootBowEvent event)
 	{
 		if (event.getEntity() instanceof Player)
@@ -162,7 +190,7 @@ public class WeaponListener implements Listener
 				return;
 			}
 
-			Weapon weapon = new Weapon(plugin, item);
+			Weapon weapon = plugin.eventListener.tempWeaponStorage.get((Player) event.getEntity());
 			int levelState = weapon.getLevel();
 
 			if (weapon.getLevel() > levelState)

@@ -4,6 +4,7 @@ package com.coffeecup.novus.weaponlevels.listeners;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -26,7 +27,7 @@ public class ToolListener implements Listener
 		plugin = instance;
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockPlace(BlockPlaceEvent event)
 	{
 		Block block = event.getBlock();
@@ -34,7 +35,7 @@ public class ToolListener implements Listener
 		BlockChecker.addPlacedBlock((block.getLocation()));
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onBlockBreak(BlockBreakEvent event)
 	{
 		Player player = event.getPlayer();
@@ -50,7 +51,7 @@ public class ToolListener implements Listener
 		{
 			if (ItemChecker.isCorrectTool(plugin, ToolType.getByItemName(item.getType().name()), block))
 			{
-				Weapon weapon = new Weapon(plugin, item);
+				Weapon weapon = plugin.eventListener.tempWeaponStorage.get(player);
 
 				int levelState = weapon.getLevel();
 				weapon.addExperience(Config.EXP_PER_HIT);

@@ -3,6 +3,7 @@ package com.coffeecup.novus.weaponlevels.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
@@ -23,7 +24,7 @@ public class ArmorListener implements Listener
 		plugin = instance;
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGH)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent event)
 	{
 		if (event.getEntity() instanceof Player)
