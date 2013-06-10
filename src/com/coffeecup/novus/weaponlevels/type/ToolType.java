@@ -1,4 +1,4 @@
-package com.coffeecup.novus.weaponlevels;
+package com.coffeecup.novus.weaponlevels.type;
 
 public enum ToolType
 {

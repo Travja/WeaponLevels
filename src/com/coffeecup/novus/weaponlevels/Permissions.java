@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 import de.bananaco.bpermissions.api.ApiLayer;
 import de.bananaco.bpermissions.api.CalculableType;
 
-public class PermissionManager
+public class Permissions
 {
 	public static boolean BPERMISSIONS = false;
 

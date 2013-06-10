@@ -2,18 +2,13 @@ package com.coffeecup.novus.weaponlevels;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.logging.Logger;
 
-import com.coffeecup.novus.weaponlevels.listeners.ArmorListener;
-import com.coffeecup.novus.weaponlevels.listeners.CommandListener;
-import com.coffeecup.novus.weaponlevels.listeners.EventListener;
-import com.coffeecup.novus.weaponlevels.listeners.ToolListener;
-import com.coffeecup.novus.weaponlevels.listeners.WeaponListener;
+import com.coffeecup.novus.weaponlevels.stages.StageManager;
+import com.coffeecup.novus.weaponlevels.type.ItemType;
+import com.coffeecup.novus.weaponlevels.type.TypeChecker;
 
 import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
@@ -22,25 +17,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import think.rpgitems.api.RPGItems;
 import think.rpgitems.item.RPGItem;
 
-import com.coffeecup.novus.weaponlevels.configuration.BlockChecker;
-import com.coffeecup.novus.weaponlevels.configuration.Config;
-import com.coffeecup.novus.weaponlevels.configuration.ItemChecker;
 
-public class WLPlugin extends JavaPlugin
+public class Plugin extends JavaPlugin
 {
 	public PluginManager pm;
 	public PluginDescriptionFile pdf;
 	public Logger log;
-
-	public List<LivingEntity> spawnedMobs;
 	
-	public WeaponListener weaponListener;
-	public ToolListener toolListener;
-	public ArmorListener armorListener;
-	public EventListener eventListener;
-	public CommandListener cmdListener;
+	public Events events;
+	public Commands cmdListener;
 	
-	public RPGItems rpgItems;
+	public static RPGItems rpgItems;
+	public static think.rpgitems.Plugin rpgPlugin;
 	
 	@Override
 	public void onEnable()
@@ -49,30 +37,24 @@ public class WLPlugin extends JavaPlugin
 		pdf = getDescription();
 		log = Logger.getLogger("Minecraft");
 		
-		spawnedMobs = new ArrayList<LivingEntity>();
-		
-		weaponListener = new WeaponListener(this);
-		toolListener = new ToolListener(this);
-		armorListener = new ArmorListener(this);
-		eventListener = new EventListener(this);
-		cmdListener = new CommandListener(this);
+		events = new Events(this);
+		cmdListener = new Commands(this);
 
-		pm.registerEvents(weaponListener, this);
-		pm.registerEvents(toolListener, this);
-		pm.registerEvents(armorListener, this);
-		pm.registerEvents(eventListener, this);
+		pm.registerEvents(events, this);
 		
 		getCommand("wl").setExecutor(cmdListener);
 		
-		Config.USE_RPG = pm.getPlugin("RPG Items") != null;
+		rpgPlugin = (think.rpgitems.Plugin) pm.getPlugin("RPG Items");
+		Config.USE_RPG = rpgPlugin != null;
 		rpgItems = new RPGItems();
 		
 		if (Config.USE_RPG)
 		{
 			log.warning("RPG ITEMS DETECTED. ITEMS CREATED BY RPG ITEMS WILL CURRENTLY NOT WORK WITH THIS PLUGIN.");
+			Config.USE_RPG = false;
 		}
 		
-		PermissionManager.BPERMISSIONS = pm.getPlugin("bPermissions") != null;
+		Permissions.BPERMISSIONS = pm.getPlugin("bPermissions") != null;
 
 		try
 		{
@@ -83,7 +65,7 @@ public class WLPlugin extends JavaPlugin
 			e.printStackTrace();
 		}
 
-		ItemChecker.loadItems(this);
+		TypeChecker.loadItems(this);
 
 		log.info("WeaponLevels v" + pdf.getVersion() + " by " + pdf.getAuthors() + " is now enabled!");
 	}
@@ -92,7 +74,7 @@ public class WLPlugin extends JavaPlugin
 	public void onDisable()
 	{
 		log.info("Storing player-placed blocks...");
-		BlockChecker.saveBlockStore();
+		Blocks.saveBlockStore();
 
 		log.info("WeaponLevels v" + pdf.getVersion() + " by " + pdf.getAuthors() + " is now disabled.");
 	}
@@ -102,7 +84,7 @@ public class WLPlugin extends JavaPlugin
 		log.info("Reloading WeaponLevels v" + pdf.getVersion() +"...");
 		
 		log.info("Storing player-placed blocks...");
-		BlockChecker.saveBlockStore();
+		Blocks.saveBlockStore();
 		
 		log.info("Loading plugin data...");
 		try
@@ -115,7 +97,7 @@ public class WLPlugin extends JavaPlugin
 		}
 		
 		log.info("Loading item data...");
-		ItemChecker.loadItems(this);	
+		TypeChecker.loadItems(this);	
 		
 		log.info("WeaponLevels has successfully reloaded.");
 	}
@@ -150,15 +132,21 @@ public class WLPlugin extends JavaPlugin
 
 		Config.loadOptionConfig(this);
 		Config.loadConfigValues(this);
-		Config.loadWeaponConfig(this, WeaponType.ARMOR);
-		Config.loadWeaponConfig(this, WeaponType.ITEM);
-		Config.loadWeaponConfig(this, WeaponType.TOOL);
-		Config.loadWeaponConfig(this, WeaponType.WEAPON);
-
-		BlockChecker.loadBlockStore(dataPath);
+		Config.loadWeaponConfig(this, ItemType.ARMOR);
+		Config.loadWeaponConfig(this, ItemType.ITEM);
+		Config.loadWeaponConfig(this, ItemType.TOOL);
+		Config.loadWeaponConfig(this, ItemType.WEAPON);
+		
+		TypeChecker.loadItems(this);
+		Blocks.loadBlockStore(dataPath);
+		
+		StageManager.loadStages(ItemType.WEAPON);
+		StageManager.loadStages(ItemType.ARMOR);
+		StageManager.loadStages(ItemType.TOOL);
+		StageManager.loadStages(ItemType.ITEM);
 	}
 	
-	public RPGItem toRPGItem(ItemStack itemstack)
+	public static RPGItem toRPGItem(ItemStack itemstack)
 	{
 		if (Config.USE_RPG)
 		{

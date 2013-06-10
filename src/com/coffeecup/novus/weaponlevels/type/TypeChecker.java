@@ -1,4 +1,4 @@
-package com.coffeecup.novus.weaponlevels.configuration;
+package com.coffeecup.novus.weaponlevels.type;
 
 import java.io.IOException;
 
@@ -8,16 +8,14 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.coffeecup.novus.weaponlevels.ToolType;
-import com.coffeecup.novus.weaponlevels.Util;
-import com.coffeecup.novus.weaponlevels.WLPlugin;
-import com.coffeecup.novus.weaponlevels.WeaponType;
+import com.coffeecup.novus.weaponlevels.Plugin;
+import com.coffeecup.novus.weaponlevels.util.Util;
 
-public class ItemChecker
+public class TypeChecker
 {
 	private static YamlConfiguration names = null;
 
-	public static void loadItems(WLPlugin plugin)
+	public static void loadItems(Plugin plugin)
 	{
 		names = new YamlConfiguration();
 
@@ -40,13 +38,8 @@ public class ItemChecker
 	 *            - The material of the item to check
 	 * @return True if the item is a weapon.
 	 */
-	public static boolean isWeapon(WLPlugin plugin, Material material)
+	public static boolean isWeapon(Material material)
 	{
-		if (names == null)
-		{
-			loadItems(plugin);
-		}
-
 		return names.getConfigurationSection("weapons").getValues(false).containsKey(material.name());
 	}
 
@@ -59,13 +52,8 @@ public class ItemChecker
 	 *            - The material of the item to check
 	 * @return True if the item is armor.
 	 */
-	public static boolean isArmor(WLPlugin plugin, Material material)
+	public static boolean isArmor(Material material)
 	{
-		if (names == null)
-		{
-			loadItems(plugin);
-		}
-
 		return names.getConfigurationSection("armor").getValues(false).containsKey(material.name());
 	}
 
@@ -78,13 +66,8 @@ public class ItemChecker
 	 *            - The material of the item to check
 	 * @return True if the item is a tool.
 	 */
-	public static boolean isTool(WLPlugin plugin, Material material)
+	public static boolean isTool(Material material)
 	{
-		if (names == null)
-		{
-			loadItems(plugin);
-		}
-
 		return names.getConfigurationSection("tools").getValues(false).containsKey(material.name());
 	}
 
@@ -99,13 +82,8 @@ public class ItemChecker
 	 *            - The tool to check
 	 * @return True if the tool is the proper tool for the block.
 	 */
-	public static boolean isCorrectTool(WLPlugin plugin, ToolType tool, Block block)
+	public static boolean isCorrectTool(ToolType tool, Block block)
 	{
-		if (names == null)
-		{
-			loadItems(plugin);
-		}
-
 		String values = names.getConfigurationSection("correct tools.").getString(tool.name());
 
 		return Util.getCommaSeperatedValues(values).contains(String.valueOf(block.getTypeId()));
@@ -120,17 +98,17 @@ public class ItemChecker
 	 *            - The material to get the name of
 	 * @return The in-game name of the item.
 	 */
-	public static String getInGameName(WLPlugin plugin, Material material)
+	public static String getInGameName(Material material)
 	{
-		if (isWeapon(plugin, material))
+		if (isWeapon(material))
 		{
 			return names.getConfigurationSection("weapons").getString(material.name());
 		}
-		else if (isArmor(plugin, material))
+		else if (isArmor(material))
 		{
 			return names.getConfigurationSection("armor").getString(material.name());
 		}
-		else if (isTool(plugin, material))
+		else if (isTool(material))
 		{
 			return names.getConfigurationSection("tools").getString(material.name());
 		}
@@ -140,23 +118,23 @@ public class ItemChecker
 		}
 	}
 
-	public static WeaponType getWeaponType(WLPlugin plugin, Material material)
+	public static ItemType getWeaponType(Material material)
 	{
-		if (isWeapon(plugin, material))
+		if (isWeapon(material))
 		{
-			return WeaponType.WEAPON;
+			return ItemType.WEAPON;
 		}
-		else if (isArmor(plugin, material))
+		else if (isArmor(material))
 		{
-			return WeaponType.ARMOR;
+			return ItemType.ARMOR;
 		}
-		else if (isTool(plugin, material))
+		else if (isTool(material))
 		{
-			return WeaponType.TOOL;
+			return ItemType.TOOL;
 		}
 		else
 		{
-			return WeaponType.ITEM;
+			return ItemType.ITEM;
 		}
 	}
 }

@@ -1,7 +1,7 @@
 name: WeaponLevels
 author: TheRealNovus
-main: com.coffeecup.novus.weaponlevels.WLPlugin
-version: 1.2.3
+main: com.coffeecup.novus.weaponlevels.Plugin
+version: 1.2.4
 softdepend: [RPG Items, bPermissions]
 
 commands:
@@ -19,6 +19,10 @@ permissions:
       weaponlevels.better: true
       weaponlevels.great: true
       weaponlevels.best: true
+      weaponlevels.reload: true
+  weaponlevels.null:
+    description: Used if no stages are available. Should never be false.
+    default: true
   weaponlevels.basic:
     description: Allows usage of the "basic" level.
     default: true
@@ -44,3 +48,5 @@ permissions:
       weaponlevels.good: true
       weaponlevels.better: true
       weaponlevels.great: true
+  weaponlevels.reload:
+    description: Allows usage of the reload command.

@@ -1,11 +1,11 @@
-package com.coffeecup.novus.weaponlevels;
+package com.coffeecup.novus.weaponlevels.type;
 
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.coffeecup.novus.weaponlevels.configuration.Config;
+import com.coffeecup.novus.weaponlevels.Config;
 
-public enum WeaponType
+public enum ItemType
 {
 	WEAPON(Config.WEAPONCONFIG, "weapons.yml"),
 	TOOL(Config.TOOLCONFIG, "tools.yml"),
@@ -15,7 +15,7 @@ public enum WeaponType
 	public YamlConfiguration config;
 	public String filename;
 
-	WeaponType(YamlConfiguration config, String filename)
+	ItemType(YamlConfiguration config, String filename)
 	{
 		this.config = config;
 		this.filename = filename;

@@ -1,4 +1,4 @@
-package com.coffeecup.novus.weaponlevels.configuration;
+package com.coffeecup.novus.weaponlevels;
 
 
 import java.io.BufferedReader;
@@ -18,40 +18,23 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
-import com.coffeecup.novus.weaponlevels.Util;
+import com.coffeecup.novus.weaponlevels.util.Util;
 
-public class BlockChecker
+public class Blocks
 {
 	private static List<Location> placedBlockStore;
 	private static File placedBlocks;
 	
-	/**
-	 * Checks if a block was spawned naturally.
-	 * 
-	 * @param block
-	 *            - The block to check.
-	 * @return True if the block was spawned naturally.
-	 */
 	public static boolean isNaturallyPlaced(Block block)
 	{
 		return !placedBlockStore.contains(block.getLocation());
 	}
 	
-	/**
-	 * Add a block to the list of player-placed blocks.
-	 * @param loc 
-	 * 			- The location of the block to add.
-	 */
 	public static void addPlacedBlock(Location loc)
 	{
 		placedBlockStore.add(loc);
 	}
 	
-	/**
-	 * Remove a block from the list of player-placed blocks.
-	 * @param loc 
-	 * 			- The location of the block to remove.
-	 */
 	public static void removePlacedBlock(Location loc)
 	{
 		placedBlockStore.remove(loc);
