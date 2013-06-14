@@ -12,7 +12,7 @@ import com.coffeecup.novus.weaponlevels.type.ItemType;
 import com.coffeecup.novus.weaponlevels.type.TypeChecker;
 import com.coffeecup.novus.weaponlevels.util.Util;
 
-public class LevelItemManager
+public class LevelDataManager
 {
 	public static boolean hasLevelData(ItemStack itemStack)
 	{
@@ -33,6 +33,24 @@ public class LevelItemManager
 		}
 		
 		return true;
+	}
+	
+	public static boolean hasExperienceBar(ItemStack item)
+	{
+		if (getType(item) == ItemType.ITEM)
+		{
+			switch (item.getType())
+			{
+			case FISHING_ROD:
+				return true;
+			default:
+				return false;
+			}
+		}
+		else
+		{
+			return true;
+		}
 	}
 	
 	public static int getLevel(ItemMeta meta)
@@ -56,7 +74,7 @@ public class LevelItemManager
 		
 		if (rawData == "ERROR")
 		{
-			Bukkit.getLogger().warning("Error reading experience data!);");
+			Bukkit.getLogger().warning("Error reading experience data!");
 			return 0;
 		}
 		
@@ -69,14 +87,10 @@ public class LevelItemManager
 	{
 		Stage stage = null;
 		
-		for (int i = level; i > 0; i--)
+		while (stage == null && level > 0)
 		{
-			stage = StageManager.getStage(type, i);
-			
-			if (stage != null)
-			{
-				break;
-			}
+			stage = StageManager.getStage(type, level);
+			level--;
 		}
 		
 		return stage;
@@ -89,7 +103,7 @@ public class LevelItemManager
 		
 		int exp = 0;
 
-		expBar = expBar.substring(1, expBar.length() - 1); // Remove brackets
+		expBar = expBar.substring(3, expBar.length() - 1); // Remove brackets
 		
 		String[] lines = expBar.split("\\|");
 
@@ -112,7 +126,7 @@ public class LevelItemManager
 	
 	public static ItemType getType(ItemStack itemStack)
 	{
-		return TypeChecker.getWeaponType(itemStack.getType());
+		return TypeChecker.getItemType(itemStack.getType());
 	}
 
 	public static String createExpBar(int max, int amount, int ratio)

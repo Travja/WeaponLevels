@@ -1,6 +1,5 @@
 general:
-    require permissions for leveling items: false
-    require permissions for using items: false
+    use permissions: false
     item description color: GRAY
     item experience bar color: WHITE
     crafting ratio: 2

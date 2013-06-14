@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 import com.coffeecup.novus.weaponlevels.stages.StageManager;
-import com.coffeecup.novus.weaponlevels.type.ItemType;
 import com.coffeecup.novus.weaponlevels.type.TypeChecker;
 
 import org.bukkit.configuration.InvalidConfigurationException;
@@ -27,8 +26,8 @@ public class Plugin extends JavaPlugin
 	public Events events;
 	public Commands cmdListener;
 	
-	public static RPGItems rpgItems;
-	public static think.rpgitems.Plugin rpgPlugin;
+	//public static RPGItems rpgItems;
+	//public static think.rpgitems.Plugin rpgPlugin;
 	
 	@Override
 	public void onEnable()
@@ -44,9 +43,11 @@ public class Plugin extends JavaPlugin
 		
 		getCommand("wl").setExecutor(cmdListener);
 		
-		rpgPlugin = (think.rpgitems.Plugin) pm.getPlugin("RPG Items");
-		Config.USE_RPG = rpgPlugin != null;
-		rpgItems = new RPGItems();
+		//rpgPlugin = (think.rpgitems.Plugin) pm.getPlugin("RPG Items");
+		//Config.USE_RPG = rpgPlugin != null;
+		//rpgItems = new RPGItems();
+		
+		Config.USE_RPG = false;
 		
 		if (Config.USE_RPG)
 		{
@@ -74,7 +75,7 @@ public class Plugin extends JavaPlugin
 	public void onDisable()
 	{
 		log.info("Storing player-placed blocks...");
-		Blocks.saveBlockStore();
+		Blocks.save();
 
 		log.info("WeaponLevels v" + pdf.getVersion() + " by " + pdf.getAuthors() + " is now disabled.");
 	}
@@ -84,7 +85,7 @@ public class Plugin extends JavaPlugin
 		log.info("Reloading WeaponLevels v" + pdf.getVersion() +"...");
 		
 		log.info("Storing player-placed blocks...");
-		Blocks.saveBlockStore();
+		Blocks.save();
 		
 		log.info("Loading plugin data...");
 		try
@@ -112,7 +113,6 @@ public class Plugin extends JavaPlugin
 		}
 		else
 		{
-			// Delete the old config file if it is there
 			File oldConfigFile = new File(folder.getPath() + File.separator + "config.yml");
 
 			if (oldConfigFile.exists())
@@ -129,28 +129,26 @@ public class Plugin extends JavaPlugin
 		{
 			configFolder.mkdir();
 		}
-
-		Config.loadOptionConfig(this);
+		
+		Config.removeOldData(this);
+		Config.loadConfig(this, Config.CONFIG);
+		Config.loadConfig(this, Config.STAGES);
+		Config.loadConfig(this, Config.GROUPS);
+		Config.loadConfig(this, Config.ITEMS);
 		Config.loadConfigValues(this);
-		Config.loadWeaponConfig(this, ItemType.ARMOR);
-		Config.loadWeaponConfig(this, ItemType.ITEM);
-		Config.loadWeaponConfig(this, ItemType.TOOL);
-		Config.loadWeaponConfig(this, ItemType.WEAPON);
 		
 		TypeChecker.loadItems(this);
-		Blocks.loadBlockStore(dataPath);
+		Blocks.load(dataPath);
 		
-		StageManager.loadStages(ItemType.WEAPON);
-		StageManager.loadStages(ItemType.ARMOR);
-		StageManager.loadStages(ItemType.TOOL);
-		StageManager.loadStages(ItemType.ITEM);
+		StageManager.loadStages();
 	}
 	
 	public static RPGItem toRPGItem(ItemStack itemstack)
 	{
 		if (Config.USE_RPG)
 		{
-			return rpgItems.toRPGItem(itemstack);
+			//return rpgItems.toRPGItem(itemstack);
+			return null;
 		}
 		else
 		{

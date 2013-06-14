@@ -11,6 +11,7 @@ public class Permissions
 
 	public static boolean hasPermission(Player player, String node)
 	{
+		
 		node = "weaponlevels." + node.toLowerCase();
 		
 		if (BPERMISSIONS)
@@ -20,6 +21,18 @@ public class Permissions
 		else
 		{
 			return player.hasPermission(node);
+		}
+	}
+	
+	public static boolean hasPermissionConfig(Player player, String node)
+	{
+		if (Config.USE_PERMS)
+		{
+			return hasPermission(player, node);
+		}
+		else
+		{
+			return true;
 		}
 	}
 	

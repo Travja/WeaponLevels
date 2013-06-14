@@ -25,22 +25,27 @@ public class Blocks
 	private static List<Location> placedBlockStore;
 	private static File placedBlocks;
 	
-	public static boolean isNaturallyPlaced(Block block)
+	public static boolean isArtificial(Block block)
+	{
+		return placedBlockStore.contains(block.getLocation());
+	}
+	
+	public static boolean isNatural(Block block)
 	{
 		return !placedBlockStore.contains(block.getLocation());
 	}
 	
-	public static void addPlacedBlock(Location loc)
+	public static void add(Block block)
 	{
-		placedBlockStore.add(loc);
+		placedBlockStore.add(block.getLocation());
 	}
 	
-	public static void removePlacedBlock(Location loc)
+	public static void remove(Block block)
 	{
-		placedBlockStore.remove(loc);
+		placedBlockStore.remove(block.getLocation());
 	}
 	
-	public static void loadBlockStore(String dir) throws IOException
+	public static void load(String dir) throws IOException
 	{
 		placedBlockStore = new ArrayList<Location>();
 		placedBlocks = new File(dir + "blocks.dat");
@@ -76,7 +81,7 @@ public class Blocks
 		reader.close();
 	}
 
-	public static void saveBlockStore()
+	public static void save()
 	{		
 		String values = "";
 		for (Location loc : placedBlockStore)

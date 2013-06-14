@@ -7,7 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.coffeecup.novus.weaponlevels.item.LevelItem;
+import com.coffeecup.novus.weaponlevels.item.LevelData;
 
 
 public class Commands implements CommandExecutor
@@ -81,7 +81,7 @@ public class Commands implements CommandExecutor
 							return true;
 						}
 						
-						LevelItem item = new LevelItem(itemStack);
+						LevelData item = new LevelData(itemStack);
 						item.setLevel(Integer.valueOf(args[1]));
 						
 						sender.sendMessage(ChatColor.GRAY + "Set item level to " + args[1] + ".");

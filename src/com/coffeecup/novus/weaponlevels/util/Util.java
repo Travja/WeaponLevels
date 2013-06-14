@@ -185,7 +185,7 @@ public class Util
 	
 	public static int getMaxLevel(Player player, ItemType type)
 	{
-		if (!Config.PERMS_TO_LEVEL)
+		if (!Config.USE_PERMS)
 		{
 			return Config.MAX_LEVEL;
 		}

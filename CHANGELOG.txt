@@ -1,27 +1,17 @@
 ==== Source Changes: ====
-* + Added CHANGELOG.txt
-* + Added README.txt (still empty lol)
-* - Removed README (no filetype extension)
-* - Removed a lot of unused imports
-* ~ Merged listeners into one file
-* ~ Organized everything much better
-* ~ Completely redesigned the plugin's structure
-* ~ Lots of optimization
-* ~ Enable and Disable messages now grab author and version from
-plugin.yml instead of hardcoding
+* ~ Code cleanup
+* ~ Huge changes to permission checks
+* ~ Reduced to 4 config files
 
 ==== Game Changes: ====
-* + Added commands "/wl version", "/wl setlevel" and "/wl reload"
-* + Added support for SuperPerms-based permission plugins
-* + Added partial support for RPG Items (still much to do)
-* + Added support for CUSTOM level groups
-* + Added configuration for description and exp bar colors
-* + Added random levels to crafting
-* - Removed triangles next to Level and EXP bar
-* - Removed console spam
-* - Removed bugs with enchanted items
-* - Removed bug where some items' names changed to "null"
-* ~ Fixed problem where spawners were not allowed regardless of config
+* + Added exp and bonuses for armor
+* + Added exp for tools
+* + Added exp and bonuses for fishing
+* + Added hunger bonuses for food
+* + Added fuel bonuses for coal
+* ~ Fixed problem where items would level up once without permissions and prevent it from being usable
+* ~ Fixed damage bonuses
+* ~ Removed experience bars from certain items
 
 ==== Required Changes: ====
 * RPG Items support

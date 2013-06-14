@@ -118,7 +118,7 @@ public class TypeChecker
 		}
 	}
 
-	public static ItemType getWeaponType(Material material)
+	public static ItemType getItemType(Material material)
 	{
 		if (isWeapon(material))
 		{

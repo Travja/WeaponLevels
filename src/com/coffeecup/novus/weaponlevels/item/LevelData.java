@@ -3,27 +3,46 @@ package com.coffeecup.novus.weaponlevels.item;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.coffeecup.novus.weaponlevels.Config;
-import com.coffeecup.novus.weaponlevels.stages.NullStage;
 import com.coffeecup.novus.weaponlevels.stages.Stage;
 import com.coffeecup.novus.weaponlevels.type.ItemType;
 
-public class LevelItem
+import com.coffeecup.novus.weaponlevels.Permissions;
+
+public class LevelData
 {
 	private ItemStack itemStack;
 	private ItemType type;
 	private Stage stage;
 	private int level;
 	private int experience;
+	private boolean hasExperienceBar;
 	
-	public LevelItem(ItemStack itemStack)
+	public LevelData(ItemStack itemStack)
 	{
 		this.itemStack = itemStack;
+		this.hasExperienceBar = LevelDataManager.hasExperienceBar(itemStack);
 		
-		if (LevelItemManager.hasLevelData(itemStack))
+		if (LevelDataManager.hasLevelData(itemStack))
+		{
+			readLevelData();
+		}
+		else
+		{
+			createNewLevelData();
+		}
+	}
+	
+	public LevelData(ItemStack itemStack, boolean experienceBar)
+	{
+		this.itemStack = itemStack;
+		this.hasExperienceBar = experienceBar;
+		
+		if (LevelDataManager.hasLevelData(itemStack))
 		{
 			readLevelData();
 		}
@@ -40,17 +59,29 @@ public class LevelItem
 	
 	public Stage getStage()
 	{
-		if (stage == null)
-		{
-			return new NullStage();
-		}
-		
 		return stage;
 	}
 	
 	public int getLevel()
 	{
 		return level;
+	}
+	
+	private boolean addLevel(Player player)
+	{
+		Stage stage = LevelDataManager.getStage(type, level + 1);
+		
+		if (Permissions.hasPermissionConfig(player, stage.getName()))
+		{
+			level++;
+			experience -= 100;
+			
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	public void setLevel(int level)
@@ -64,18 +95,23 @@ public class LevelItem
 		return experience;
 	}
 	
-	public boolean addExperience(int amount)
-	{		
+	public boolean addExperience(Player player, int amount)
+	{
 		experience += amount;
 		
 		boolean levelUp = false;
 		
 		while (experience >= 100)
 		{
-			level++;
-			experience -= 100;
-			
-			levelUp = true;
+			if (addLevel(player))
+			{
+				levelUp = true;
+			}
+			else
+			{
+				levelUp = false;
+				break;
+			}
 		}
 		
 		update();
@@ -83,14 +119,25 @@ public class LevelItem
 		return levelUp;
 	}
 	
+	public boolean hasExperienceBar()
+	{
+		return hasExperienceBar;
+	}
+	
+	public void setExperienceBar(boolean experienceBar)
+	{
+		hasExperienceBar = experienceBar;
+		update();
+	}
+	
 	private void readLevelData()
 	{
 		ItemMeta meta = itemStack.getItemMeta();
 		
-		type = LevelItemManager.getType(itemStack);
-		level = LevelItemManager.getLevel(meta);
-		experience = LevelItemManager.getExperience(meta);
-		stage = LevelItemManager.getStage(type, level);
+		type = LevelDataManager.getType(itemStack);
+		level = LevelDataManager.getLevel(meta);
+		experience = LevelDataManager.getExperience(meta);
+		stage = LevelDataManager.getStage(type, level);
 	}
 	
 	private void writeLevelData()
@@ -104,8 +151,13 @@ public class LevelItem
 		}
 		
 		lore.clear();
+		
 		lore.add(Config.DESCRIPTION_COLOR + "Level " + level);
-		lore.add(Config.DESCRIPTION_COLOR + "EXP: " + LevelItemManager.createExpBar(100, experience, 5));
+		
+		if (hasExperienceBar)
+		{
+			lore.add(Config.DESCRIPTION_COLOR + "EXP: " + LevelDataManager.createExpBar(100, experience, 5));
+		}
 		
 		meta.setLore(lore);
 		itemStack.setItemMeta(meta);
@@ -113,7 +165,7 @@ public class LevelItem
 	
 	private void createNewLevelData()
 	{
-		type = LevelItemManager.getType(itemStack);
+		type = LevelDataManager.getType(itemStack);
 		level = 1;
 		experience = 0;
 		
@@ -128,7 +180,7 @@ public class LevelItem
 			experience = 100;
 		}
 		
-		stage = LevelItemManager.getStage(type, level);
+		stage = LevelDataManager.getStage(type, level);
 		
 		if (stage != null)
 		{
