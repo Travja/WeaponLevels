@@ -1,4 +1,4 @@
-package com.coffeecup.novus.weaponlevels.item;
+package com.coffeecup.novus.weaponlevels.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -82,11 +82,16 @@ public class LevelDataManager
 		
 		if (rawData == "ERROR")
 		{
-			Bukkit.getLogger().warning("Error reading experience data!");
+			Bukkit.getLogger().warning("Error reading experience data for " + meta.getDisplayName() + " (line 85)");
 			return 0;
 		}
 		
-		String[] split = rawData.split(": "); 
+		String[] split = rawData.split(": ");
+		
+		if (split.length < 2)
+		{
+			Bukkit.getLogger().warning("Error reading experience data for " + meta.getDisplayName() + " (line 93)");
+		}
 		
 		return readExperience(split[1], 5);
 	}

@@ -8,7 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.coffeecup.novus.weaponlevels.Config;
-import com.coffeecup.novus.weaponlevels.item.LevelEnchantment;
+import com.coffeecup.novus.weaponlevels.data.LevelEnchantment;
 import com.coffeecup.novus.weaponlevels.type.TypeChecker;
 
 public class Stage

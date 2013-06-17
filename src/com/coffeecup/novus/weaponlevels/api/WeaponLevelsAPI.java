@@ -4,7 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import com.coffeecup.novus.weaponlevels.item.*;
+import com.coffeecup.novus.weaponlevels.data.*;
 
 public class WeaponLevelsAPI
 {	

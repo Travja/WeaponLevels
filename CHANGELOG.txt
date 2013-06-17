@@ -1,14 +1,13 @@
 ==== Source Changes: ====
-* - Removed bPermissions dependancy
-* - Code cleanups
-* - Added basic developer API - WeaponLevelsAPI
+* Renamed package ...weaponlevels.item to ...weaponlevels.data
 
 ==== Game Changes: ====
-* + Blocks retain experience data after being placed
-* + Furnaces gain experience from smelting
-* ~ Fixed bug requiring bPermissions to run
-* ~ Fixed bug overwriting configs
-* ~ Names from other plugins wont be overwritten
-* ~ Fixed bows and arrows
-* ~ Fixed console spam when bare-handed
-* ~ Fixed console spam: "Error reading experience bar!"
+* Fixed "silk-touch" bug
+
+==== Required Changes: ====
+* RPGItems support
+* PVPGunsPlus support
+* DiabloDrops support
+* MagicalWeapons support
+* GroupManager support
+* PEX support

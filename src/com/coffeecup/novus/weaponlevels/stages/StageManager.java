@@ -11,7 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.ConfigurationSection;
 
 import com.coffeecup.novus.weaponlevels.Config;
-import com.coffeecup.novus.weaponlevels.item.LevelEnchantment;
+import com.coffeecup.novus.weaponlevels.data.LevelEnchantment;
 import com.coffeecup.novus.weaponlevels.type.ItemType;
 import com.coffeecup.novus.weaponlevels.util.Util;
 

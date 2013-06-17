@@ -1,4 +1,4 @@
-package com.coffeecup.novus.weaponlevels.item;
+package com.coffeecup.novus.weaponlevels.data;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

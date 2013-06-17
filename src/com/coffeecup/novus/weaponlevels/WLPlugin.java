@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-import com.coffeecup.novus.weaponlevels.item.BlockDataManager;
+import com.coffeecup.novus.weaponlevels.data.BlockDataManager;
 import com.coffeecup.novus.weaponlevels.stages.StageManager;
 import com.coffeecup.novus.weaponlevels.type.TypeChecker;
 
@@ -46,7 +46,9 @@ public class WLPlugin extends JavaPlugin
 		
 		rpgPlugin = (think.rpgitems.Plugin) pm.getPlugin("RPG Items");
 		Config.USE_RPG = rpgPlugin != null;
-		rpgItems = new RPGItems();
+		
+		if (Config.USE_RPG)
+			{rpgItems = new RPGItems();}
 		
 		if (Config.USE_RPG)
 		{

@@ -1,4 +1,4 @@
-package com.coffeecup.novus.weaponlevels.item;
+package com.coffeecup.novus.weaponlevels.data;
 
 import java.io.BufferedReader;
 import java.io.File;

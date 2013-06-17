@@ -32,9 +32,9 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
-import com.coffeecup.novus.weaponlevels.item.BlockDataManager;
-import com.coffeecup.novus.weaponlevels.item.LevelData;
-import com.coffeecup.novus.weaponlevels.item.LevelDataManager;
+import com.coffeecup.novus.weaponlevels.data.BlockDataManager;
+import com.coffeecup.novus.weaponlevels.data.LevelData;
+import com.coffeecup.novus.weaponlevels.data.LevelDataManager;
 import com.coffeecup.novus.weaponlevels.stages.Stage;
 import com.coffeecup.novus.weaponlevels.type.ItemType;
 import com.coffeecup.novus.weaponlevels.type.ToolType;
@@ -312,11 +312,16 @@ public class Events implements Listener
 			itemStorage.put(player, data);
 		}
 		
-		if (!cancel)
+		if (!cancel && !event.isCancelled())
 		{
-			ItemStack stack = new ItemStack(event.getBlock().getType(), 1);
-			BlockDataManager.apply(player, event.getBlock(), stack);
-			event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), stack);
+			for (ItemStack stack : event.getBlock().getDrops(itemStack))
+			{
+				BlockDataManager.apply(player, event.getBlock(), stack);
+				event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), stack);
+			}
+			
+			event.setCancelled(true);
+			event.getBlock().setType(Material.AIR);
 		}
 	}
 	
