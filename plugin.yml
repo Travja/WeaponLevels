@@ -1,7 +1,7 @@
 name: WeaponLevels
 author: TheRealNovus
-main: com.coffeecup.novus.weaponlevels.Plugin
-version: 1.2.5
+main: com.coffeecup.novus.weaponlevels.WLPlugin
+version: 1.2.6
 softdepend: [bPermissions]
 
 commands:

@@ -7,11 +7,14 @@ import java.util.UUID;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Fish;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -24,10 +27,12 @@ import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.FurnaceSmeltEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerFishEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
+import com.coffeecup.novus.weaponlevels.item.BlockDataManager;
 import com.coffeecup.novus.weaponlevels.item.LevelData;
 import com.coffeecup.novus.weaponlevels.item.LevelDataManager;
 import com.coffeecup.novus.weaponlevels.stages.Stage;
@@ -38,12 +43,14 @@ import com.coffeecup.novus.weaponlevels.util.Util;
 
 public class Events implements Listener
 {
-	private Plugin plugin;
+	private WLPlugin plugin;
 	
 	private HashMap<Player, LevelData> itemStorage = new HashMap<Player, LevelData>();
+	private HashMap<Arrow, LevelData> arrowStorage = new HashMap<Arrow, LevelData>();
+	private HashMap<Player, Block> craftStorage = new HashMap<Player, Block>();
 	private List<UUID> spawnStorage = new ArrayList<UUID>();
 	
-	public Events(Plugin wlPlugin)
+	public Events(WLPlugin wlPlugin)
 	{
 		plugin = wlPlugin;
 	}
@@ -136,6 +143,26 @@ public class Events implements Listener
 				itemStorage.put(player, data);
 			}
 		}
+		
+		if (event.getDamager() instanceof Arrow)
+		{
+			Arrow arrow = (Arrow) event.getDamager();
+			
+			if (arrowStorage.containsKey(arrow))
+			{
+				LevelData data = arrowStorage.get(arrow);
+				Stage stage = data.getStage();
+				
+				event.setDamage(event.getDamage() + stage.getBonus("damage"));
+				
+				if (data.addExperience((Player) arrow.getShooter(), Config.EXP_PER_HIT))
+				{
+					Util.dropExperience(arrow.getLocation(), Config.EXP_ON_LEVEL, 3);
+				}
+				
+				arrowStorage.remove(arrow);
+			}
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
@@ -198,6 +225,19 @@ public class Events implements Listener
 	}
 	
 	@EventHandler(priority = EventPriority.NORMAL)
+	public void onPlayerInteract(PlayerInteractEvent event)
+	{
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK)
+		{
+			if (event.getClickedBlock().getType().equals(Material.WORKBENCH))
+			{
+				System.out.println("Stored");
+				craftStorage.put(event.getPlayer(), event.getClickedBlock());
+			}
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.NORMAL)
 	public void onCraft(CraftItemEvent event)
 	{
 		Player player = (Player) event.getWhoClicked();
@@ -211,6 +251,14 @@ public class Events implements Listener
 		LevelData item = new LevelData(itemStack);
 		item.setLevel(Util.getLevelOnCurve(1, Util.getMaxLevel(player, LevelDataManager.getType(itemStack)), Config.CRAFT_RATIO));
 		item.update();
+		
+		Block block = craftStorage.get(player);
+		
+		if (block != null)
+		{
+			System.out.println("Added");
+			BlockDataManager.addExperience(block, Config.EXP_PER_HIT);
+		}
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
@@ -219,6 +267,11 @@ public class Events implements Listener
 		if (!event.isCancelled())
 		{
 			Blocks.add(event.getBlock());
+			
+			Block block = event.getBlock();
+			ItemStack itemStack = event.getItemInHand();
+			LevelData data = new LevelData(itemStack);
+			BlockDataManager.put(block, data);
 		}
 	}
 	
@@ -227,6 +280,7 @@ public class Events implements Listener
 	{
 		Player player = event.getPlayer();
 		ItemStack itemStack = player.getItemInHand();
+		boolean cancel = false;
 		
 		if (itemStack != null && itemStack.getTypeId() != 0 && Config.isItemEnabled(plugin, itemStack.getTypeId()) &&
 				!event.isCancelled() && Blocks.isNatural(event.getBlock()) &&  
@@ -252,10 +306,17 @@ public class Events implements Listener
 			else
 			{
 				player.sendMessage(ChatColor.RED + "This tool's level is too high for you to use!");
-				event.setCancelled(true);
+				cancel = true;
 			}
 			
 			itemStorage.put(player, data);
+		}
+		
+		if (!cancel)
+		{
+			ItemStack stack = new ItemStack(event.getBlock().getType(), 1);
+			BlockDataManager.apply(player, event.getBlock(), stack);
+			event.getBlock().getWorld().dropItemNaturally(event.getBlock().getLocation(), stack);
 		}
 	}
 	
@@ -343,6 +404,8 @@ public class Events implements Listener
 		LevelData resultData = new LevelData(result);
 		
 		resultData.setLevel(sourceData.getLevel());
+		
+		BlockDataManager.addExperience(event.getBlock(), Config.EXP_PER_HIT);
 	}
 	
 	@EventHandler(priority = EventPriority.HIGH)
@@ -359,7 +422,9 @@ public class Events implements Listener
 			if (hasPermission)
 			{
 				Vector velocity = event.getProjectile().getVelocity();
-				player.getWorld().spawnArrow(player.getLocation(), velocity, 0.6f, 12f);
+				Arrow arrow = player.launchProjectile(Arrow.class);
+				arrow.setVelocity(velocity);
+				arrowStorage.put(arrow, bowData);
 			}
 			else
 			{

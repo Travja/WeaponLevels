@@ -41,6 +41,9 @@ public class LevelDataManager
 		{
 			switch (item.getType())
 			{
+			case WORKBENCH:
+			case FURNACE:
+			case BOW:
 			case FISHING_ROD:
 				return true;
 			default:
@@ -68,8 +71,13 @@ public class LevelDataManager
 		return Integer.valueOf(split[1]);
 	}
 	
-	public static int getExperience(ItemMeta meta)
+	public static int getExperience(ItemMeta meta, boolean hasExpBar)
 	{
+		if (!hasExpBar)
+		{
+			return 0;
+		}
+		
 		String rawData = Util.searchListForString(meta.getLore(), "EXP:", "ERROR", "▲");
 		
 		if (rawData == "ERROR")

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import com.coffeecup.novus.weaponlevels.item.BlockDataManager;
 import com.coffeecup.novus.weaponlevels.stages.StageManager;
 import com.coffeecup.novus.weaponlevels.type.TypeChecker;
 
@@ -17,7 +18,7 @@ import think.rpgitems.api.RPGItems;
 import think.rpgitems.item.RPGItem;
 
 
-public class Plugin extends JavaPlugin
+public class WLPlugin extends JavaPlugin
 {
 	public PluginManager pm;
 	public PluginDescriptionFile pdf;
@@ -26,8 +27,8 @@ public class Plugin extends JavaPlugin
 	public Events events;
 	public Commands cmdListener;
 	
-	//public static RPGItems rpgItems;
-	//public static think.rpgitems.Plugin rpgPlugin;
+	public static RPGItems rpgItems;
+	public static think.rpgitems.Plugin rpgPlugin;
 	
 	@Override
 	public void onEnable()
@@ -43,11 +44,9 @@ public class Plugin extends JavaPlugin
 		
 		getCommand("wl").setExecutor(cmdListener);
 		
-		//rpgPlugin = (think.rpgitems.Plugin) pm.getPlugin("RPG Items");
-		//Config.USE_RPG = rpgPlugin != null;
-		//rpgItems = new RPGItems();
-		
-		Config.USE_RPG = false;
+		rpgPlugin = (think.rpgitems.Plugin) pm.getPlugin("RPG Items");
+		Config.USE_RPG = rpgPlugin != null;
+		rpgItems = new RPGItems();
 		
 		if (Config.USE_RPG)
 		{
@@ -74,8 +73,16 @@ public class Plugin extends JavaPlugin
 	@Override
 	public void onDisable()
 	{
-		log.info("Storing player-placed blocks...");
+		log.info("Storing block data...");
 		Blocks.save();
+		try
+		{
+			BlockDataManager.save(new File(getDataFolder() + File.separator + "blocks" + File.separator + "blockdata.dat"));
+		} 
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
 
 		log.info("WeaponLevels v" + pdf.getVersion() + " by " + pdf.getAuthors() + " is now disabled.");
 	}
@@ -84,8 +91,16 @@ public class Plugin extends JavaPlugin
 	{
 		log.info("Reloading WeaponLevels v" + pdf.getVersion() +"...");
 		
-		log.info("Storing player-placed blocks...");
+		log.info("Storing block data...");
 		Blocks.save();
+		try
+		{
+			BlockDataManager.save(new File(getDataFolder() + File.separator + "blocks" + File.separator + "blockdata.dat"));
+		} 
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
 		
 		log.info("Loading plugin data...");
 		try
@@ -119,6 +134,13 @@ public class Plugin extends JavaPlugin
 			{
 				oldConfigFile.delete();
 			}
+			
+			File oldBlocksFile = new File(folder.getPath() + File.separator + "blocks.dat");
+			
+			if (oldBlocksFile.exists())
+			{
+				oldBlocksFile.delete();
+			}
 		}
 
 		String dataPath = folder.getPath() + File.separator;
@@ -138,7 +160,16 @@ public class Plugin extends JavaPlugin
 		Config.loadConfigValues(this);
 		
 		TypeChecker.loadItems(this);
-		Blocks.load(dataPath);
+		
+		File blocksFolder = new File(dataPath + "blocks");
+		
+		if (!blocksFolder.exists())
+		{
+			blocksFolder.mkdir();
+		}
+		
+		Blocks.load(blocksFolder.getPath());		
+		BlockDataManager.load(new File(blocksFolder.getPath() + File.separator + "blockdata.dat"));
 		
 		StageManager.loadStages();
 	}

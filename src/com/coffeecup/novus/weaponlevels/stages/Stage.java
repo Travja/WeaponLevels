@@ -59,10 +59,22 @@ public class Stage
 		{
 			// RPGItems implementation here
 		}
-		else
+		else if (item.hasItemMeta())
 		{
 			ItemMeta meta = item.getItemMeta();
-			meta.setDisplayName(getColor() + TypeChecker.getInGameName(item.getType()));			
+			
+			if (meta.hasDisplayName())
+			{
+				if (ChatColor.stripColor(meta.getDisplayName()).equals(TypeChecker.getInGameName(item.getType())))
+				{
+					meta.setDisplayName(getColor() + TypeChecker.getInGameName(item.getType()));
+				}
+			}
+			else
+			{
+				meta.setDisplayName(getColor() + TypeChecker.getInGameName(item.getType()));
+			}
+			
 			item.setItemMeta(meta);
 			
 			for (LevelEnchantment enchantment : getEnchantments())

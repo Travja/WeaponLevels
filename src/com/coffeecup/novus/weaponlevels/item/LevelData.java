@@ -136,13 +136,19 @@ public class LevelData
 		
 		type = LevelDataManager.getType(itemStack);
 		level = LevelDataManager.getLevel(meta);
-		experience = LevelDataManager.getExperience(meta);
+		experience = LevelDataManager.getExperience(meta, hasExperienceBar);
 		stage = LevelDataManager.getStage(type, level);
 	}
 	
 	private void writeLevelData()
 	{
 		ItemMeta meta = itemStack.getItemMeta();
+		
+		if (meta == null)
+		{
+			return;
+		}
+		
 		List<String> lore = meta.getLore();
 		
 		if (lore == null) 

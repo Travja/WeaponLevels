@@ -1,5 +1,6 @@
 package com.coffeecup.novus.weaponlevels.util;
 
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -203,5 +204,17 @@ public class Util
 		}
 		
 		return 0;
+	}
+	
+	public static void printlnObj(PrintStream printer, Object...objects)
+	{
+		String line = "";
+		
+		for (Object obj : objects)
+		{
+			line += obj.toString() + ":";
+		}
+		
+		printer.println(line);
 	}
 }

@@ -48,7 +48,7 @@ public class Blocks
 	public static void load(String dir) throws IOException
 	{
 		placedBlockStore = new ArrayList<Location>();
-		placedBlocks = new File(dir + "blocks.dat");
+		placedBlocks = new File(dir + File.separator + "artificial.dat");
 
 		if (!placedBlocks.exists())
 		{

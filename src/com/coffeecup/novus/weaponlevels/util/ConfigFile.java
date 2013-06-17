@@ -1,6 +1,6 @@
 package com.coffeecup.novus.weaponlevels.util;
 
-import de.bananaco.bpermissions.imp.YamlConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 public class ConfigFile extends YamlConfiguration
 {

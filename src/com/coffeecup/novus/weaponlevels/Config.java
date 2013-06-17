@@ -6,6 +6,7 @@ import java.io.IOException;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.InvalidConfigurationException;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 
 import com.coffeecup.novus.weaponlevels.type.TypeChecker;
@@ -32,7 +33,7 @@ public class Config
 
 	public static boolean USE_RPG;
 
-	public static void loadConfig(Plugin plugin, ConfigFile config) throws IOException,
+	public static void loadConfig(WLPlugin plugin, ConfigFile config) throws IOException,
 			InvalidConfigurationException
 	{
 		File folder = plugin.getDataFolder();
@@ -55,7 +56,7 @@ public class Config
 		config.save(configFile);
 	}
 
-	public static void loadConfigValues(Plugin plugin)
+	public static void loadConfigValues(WLPlugin plugin)
 	{
 		USE_PERMS = CONFIG.getBoolean("general.use permissions");
 		DESCRIPTION_COLOR = Util.getSafeChatColor(CONFIG.getString("general.item description color"), ChatColor.GRAY);
@@ -74,7 +75,7 @@ public class Config
 		}
 	}
 
-	public static int getDeathExperience(Plugin plugin, EntityType type)
+	public static int getDeathExperience(WLPlugin plugin, EntityType type)
 	{
 		String name = type.name().replace('_', ' ').toLowerCase();
 		int exp = plugin.getConfig().getInt("general.experience per kill." + name);
@@ -85,7 +86,7 @@ public class Config
 			return 6;
 	}
 
-	public static boolean isItemEnabled(Plugin plugin, int typeId)
+	public static boolean isItemEnabled(WLPlugin plugin, int typeId)
 	{
 		String disabledItems = plugin.getConfig().getString("general.disabled items");
 
@@ -107,15 +108,22 @@ public class Config
 		return true;
 	}
 	
-	public static void removeOldData(Plugin plugin)
+	public static void removeOldData(WLPlugin plugin)
 	{
-		deleteOldConfigs(plugin);
+		try
+		{
+			deleteOldConfigs(plugin);
+		} 
+		catch (IOException | InvalidConfigurationException e)
+		{
+			
+		}
 		
 		CONFIG.set("general.require permissions for leveling items", null);
 		CONFIG.set("general.require permissions for using items", null);
 	}
 	
-	private static void deleteOldConfigs(Plugin plugin)
+	private static void deleteOldConfigs(WLPlugin plugin) throws IOException, InvalidConfigurationException
 	{
 		File folder = plugin.getDataFolder();
 		
@@ -123,10 +131,18 @@ public class Config
 		
 		for (File file : new File(folder.getPath() + File.separator + "configuration").listFiles())
 		{
-			if (file.getName() != "config.yml" && file.getName() != "stages.yml" &&
-					file.getName() != "groups.yml" && file.getName() != "items.yml")
-			{
+			if (file.getName().equalsIgnoreCase("armor.yml"))
 				file.delete();
+			if (file.getName().equalsIgnoreCase("weapons.yml"))
+				file.delete();
+			if (file.getName().equalsIgnoreCase("tools.yml"))
+				file.delete();
+			if (file.getName().equalsIgnoreCase("items.yml"))
+			{
+				YamlConfiguration config = new YamlConfiguration();
+				config.load(file);
+				if (config.contains("stages"))
+					file.delete();
 			}
 		}
 	}

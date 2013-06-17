@@ -8,14 +8,14 @@ import org.bukkit.block.Block;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import com.coffeecup.novus.weaponlevels.Plugin;
+import com.coffeecup.novus.weaponlevels.WLPlugin;
 import com.coffeecup.novus.weaponlevels.util.Util;
 
 public class TypeChecker
 {
 	private static YamlConfiguration names = null;
 
-	public static void loadItems(Plugin plugin)
+	public static void loadItems(WLPlugin plugin)
 	{
 		names = new YamlConfiguration();
 

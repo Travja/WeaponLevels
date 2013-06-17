@@ -1,17 +1,14 @@
 ==== Source Changes: ====
-* ~ Code cleanup
-* ~ Huge changes to permission checks
-* ~ Reduced to 4 config files
+* - Removed bPermissions dependancy
+* - Code cleanups
+* - Added basic developer API - WeaponLevelsAPI
 
 ==== Game Changes: ====
-* + Added exp and bonuses for armor
-* + Added exp for tools
-* + Added exp and bonuses for fishing
-* + Added hunger bonuses for food
-* + Added fuel bonuses for coal
-* ~ Fixed problem where items would level up once without permissions and prevent it from being usable
-* ~ Fixed damage bonuses
-* ~ Removed experience bars from certain items
-
-==== Required Changes: ====
-* RPG Items support
+* + Blocks retain experience data after being placed
+* + Furnaces gain experience from smelting
+* ~ Fixed bug requiring bPermissions to run
+* ~ Fixed bug overwriting configs
+* ~ Names from other plugins wont be overwritten
+* ~ Fixed bows and arrows
+* ~ Fixed console spam when bare-handed
+* ~ Fixed console spam: "Error reading experience bar!"

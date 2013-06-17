@@ -6,15 +6,14 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
 import com.coffeecup.novus.weaponlevels.item.LevelData;
 
 
 public class Commands implements CommandExecutor
 {
-	private Plugin plugin;
+	private WLPlugin plugin;
 
-	public Commands(Plugin wl)
+	public Commands(WLPlugin wl)
 	{
 		plugin = wl;
 	}
