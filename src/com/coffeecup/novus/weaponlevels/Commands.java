@@ -74,7 +74,7 @@ public class Commands implements CommandExecutor
 							sender.sendMessage(ChatColor.RED + "That number is too high!");
 						}
 						
-						ItemStack itemStack = ((Player) sender).getInventory().getItemInHand();
+						ItemStack itemStack = ((Player) sender).getInventory().getItemInMainHand();
 						
 						if (itemStack == null || itemStack.getType() == Material.AIR)
 						{

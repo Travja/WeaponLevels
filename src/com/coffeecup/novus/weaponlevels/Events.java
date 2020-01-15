@@ -189,7 +189,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getClickedBlock().getType().equals(Material.WORKBENCH)) {
+            if (event.getClickedBlock().getType().equals(Material.CRAFTING_TABLE)) {
                 System.out.println("Stored");
                 craftStorage.put(event.getPlayer(), event.getClickedBlock());
             }
@@ -291,7 +291,7 @@ public class Events implements Listener {
                     hook.setBiteChance(hook.getBiteChance() + rodData.getStage().getBonus("fishing"));
                     break;
                 case CAUGHT_FISH:
-                    ItemStack fish = new ItemStack(Material.RAW_FISH, 1);
+                    ItemStack fish = new ItemStack(Material.COD, 1);
                     LevelData fishData = new LevelData(fish);
 
                     fishData.setLevel(Util.getLevelOnCurve(1, rodData.getLevel(), Config.CRAFT_RATIO));
