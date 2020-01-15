@@ -1,6 +1,7 @@
 package com.coffeecup.novus.weaponlevels;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -73,9 +74,9 @@ public class Commands implements CommandExecutor
 							sender.sendMessage(ChatColor.RED + "That number is too high!");
 						}
 						
-						ItemStack itemStack = ((Player) sender).getItemInHand();
+						ItemStack itemStack = ((Player) sender).getInventory().getItemInHand();
 						
-						if (itemStack == null || itemStack.getTypeId() == 0)
+						if (itemStack == null || itemStack.getType() == Material.AIR)
 						{
 							sender.sendMessage(ChatColor.RED + "You need to be holding an item to use that command!");
 							return true;

@@ -2,6 +2,7 @@ package com.coffeecup.novus.weaponlevels;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -48,7 +49,9 @@ public class Config
 		}
 
 		ConfigFile defaultConfig = new ConfigFile(config.getName());
-		defaultConfig.load(plugin.getResource(config.getName()));
+		InputStreamReader reader = new InputStreamReader(plugin.getResource(config.getName()));
+		defaultConfig.load(reader);
+		reader.close();
 
 		config.load(configFile);
 		config.setDefaults(defaultConfig);
@@ -86,20 +89,20 @@ public class Config
 			return 6;
 	}
 
-	public static boolean isItemEnabled(WLPlugin plugin, int typeId)
+	public static boolean isItemEnabled(WLPlugin plugin, Material typeId)
 	{
 		String disabledItems = plugin.getConfig().getString("general.disabled items");
 
-		if (Util.getCommaSeperatedValues(disabledItems).contains(String.valueOf(typeId)))
+		if (Util.getCommaSeperatedValues(disabledItems).contains(typeId.name()))
 		{
 			return false;
 		}
 
 		if (!NON_WEAPONS_ENABLED)
 		{
-			if (!TypeChecker.isWeapon(Material.getMaterial(typeId))
-					&& !TypeChecker.isArmor(Material.getMaterial(typeId))
-					&& !TypeChecker.isTool(Material.getMaterial(typeId)))
+			if (!TypeChecker.isWeapon(Material.getMaterial(typeId.name()))
+					&& !TypeChecker.isArmor(Material.getMaterial(typeId.name()))
+					&& !TypeChecker.isTool(Material.getMaterial(typeId.name())))
 			{
 				return false;
 			}

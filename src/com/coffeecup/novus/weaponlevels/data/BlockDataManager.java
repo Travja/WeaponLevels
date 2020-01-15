@@ -21,7 +21,7 @@ import com.coffeecup.novus.weaponlevels.util.Util;
 
 public class BlockDataManager
 {
-	private static HashMap<Location, BlockData> data = new HashMap<Location, BlockData>();
+	/*private static HashMap<Location, BlockData> data = new HashMap<Location, BlockData>();
 	
 	public static void put(Block block, LevelData data)
 	{
@@ -112,5 +112,5 @@ public class BlockDataManager
 		}
 		
 		printer.close();
-	}
+	}*/
 }

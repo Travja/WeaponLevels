@@ -1,19 +1,19 @@
 package com.coffeecup.novus.weaponlevels.stages;
 
+import com.coffeecup.novus.weaponlevels.Config;
+import com.coffeecup.novus.weaponlevels.data.LevelEnchantment;
+import com.coffeecup.novus.weaponlevels.type.ItemType;
+import com.coffeecup.novus.weaponlevels.util.Util;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.enchantments.Enchantment;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.ConfigurationSection;
-
-import com.coffeecup.novus.weaponlevels.Config;
-import com.coffeecup.novus.weaponlevels.data.LevelEnchantment;
-import com.coffeecup.novus.weaponlevels.type.ItemType;
-import com.coffeecup.novus.weaponlevels.util.Util;
 
 public class StageManager
 {
@@ -59,10 +59,10 @@ public class StageManager
 			{
 				String[] split = enchantment.split("\\.");
 				
-				int id = Integer.valueOf(split[0]);
+				String id = split[0];
 				int level = Integer.valueOf(split[1]);
 				
-				list.add(new LevelEnchantment(id, level));				
+				list.add(new LevelEnchantment(Enchantment.getByName(id), level));
 			}
 			catch (NumberFormatException e)
 			{

@@ -153,10 +153,21 @@ public class LevelData
 		
 		if (lore == null) 
 		{
-			lore = new ArrayList<String>();
+			lore = new ArrayList<>();
 		}
-		
-		lore.clear();
+
+		List<String> markDelete = new ArrayList<>();
+		for(String str: lore) {
+			if(str.contains(Config.DESCRIPTION_COLOR + "Level ") || str.contains(Config.DESCRIPTION_COLOR + "EXP: "))
+				markDelete.add(str);
+		}
+
+		for(String str: markDelete) {
+			lore.remove(str);
+		}
+
+		if(!lore.isEmpty())
+			lore.add("");
 		
 		lore.add(Config.DESCRIPTION_COLOR + "Level " + level);
 		
