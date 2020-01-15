@@ -209,12 +209,12 @@ public class Events implements Listener {
         item.setLevel(Util.getLevelOnCurve(1, Util.getMaxLevel(player, LevelDataManager.getType(itemStack)), Config.CRAFT_RATIO));
         item.update();
 
-        /*Block block = craftStorage.get(player);
+        Block block = craftStorage.get(player);
 
         if (block != null) {
             System.out.println("Added");
             BlockDataManager.addExperience(block, Config.EXP_PER_HIT);
-        }*/
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -222,10 +222,10 @@ public class Events implements Listener {
         if (!event.isCancelled()) {
             Blocks.add(event.getBlock());
 
-            /*Block block = event.getBlock();
+            Block block = event.getBlock();
             ItemStack itemStack = event.getItemInHand();
             LevelData data = new LevelData(itemStack);
-            BlockDataManager.put(block, data);*/
+            BlockDataManager.put(block, data);
         }
     }
 
@@ -259,7 +259,7 @@ public class Events implements Listener {
             itemStorage.put(player, data);
         }
 		
-		/*if (!cancel && !event.isCancelled()) {
+		if (!cancel && !event.isCancelled()) {
             for (ItemStack stack : event.getBlock().getDrops(itemStack))
                 BlockDataManager.apply(player, event.getBlock(), stack);
         }
@@ -345,7 +345,7 @@ public class Events implements Listener {
 
         resultData.setLevel(sourceData.getLevel());
 
-        //BlockDataManager.addExperience(event.getBlock(), Config.EXP_PER_HIT);
+        BlockDataManager.addExperience(event.getBlock(), Config.EXP_PER_HIT);
     }
 
     @EventHandler(priority = EventPriority.HIGH)

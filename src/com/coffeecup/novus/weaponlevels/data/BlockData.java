@@ -5,7 +5,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class BlockData
 {
-	/*int level, exp;
+	int level, exp;
 	
 	public BlockData(int level, int exp)
 	{
@@ -24,5 +24,5 @@ public class BlockData
 		LevelData data = new LevelData(item);
 		data.setLevel(level);
 		data.addExperience(player, exp);
-	}*/
+	}
 }

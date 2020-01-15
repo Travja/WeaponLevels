@@ -69,13 +69,13 @@ public class WLPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        /*log.info("Storing block data...");
+        log.info("Storing block data...");
         Blocks.save();
         try {
             BlockDataManager.save(new File(getDataFolder() + File.separator + "blocks" + File.separator + "blockdata.dat"));
         } catch (IOException e1) {
             e1.printStackTrace();
-        }*/
+        }
 
         log.info("WeaponLevels v" + pdf.getVersion() + " by " + pdf.getAuthors() + " is now disabled.");
     }
@@ -83,13 +83,13 @@ public class WLPlugin extends JavaPlugin {
     public void onReload() {
         log.info("Reloading WeaponLevels v" + pdf.getVersion() + "...");
 
-        /*log.info("Storing block data...");
+        log.info("Storing block data...");
         Blocks.save();
         try {
             BlockDataManager.save(new File(getDataFolder() + File.separator + "blocks" + File.separator + "blockdata.dat"));
         } catch (IOException e1) {
             e1.printStackTrace();
-        }*/
+        }
 
         log.info("Loading plugin data...");
         try {
@@ -146,8 +146,8 @@ public class WLPlugin extends JavaPlugin {
             blocksFolder.mkdir();
         }
 
-        /*Blocks.load(blocksFolder.getPath());
-        BlockDataManager.load(new File(blocksFolder.getPath() + File.separator + "blockdata.dat"));*/
+        Blocks.load(blocksFolder.getPath());
+        BlockDataManager.load(new File(blocksFolder.getPath() + File.separator + "blockdata.dat"));
 
         StageManager.loadStages();
     }
