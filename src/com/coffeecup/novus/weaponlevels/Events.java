@@ -50,7 +50,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAnimate(PlayerAnimationEvent event) {
         Player player = event.getPlayer();
-        ItemStack itemStack = player.getItemInHand();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
 
         if (itemStack != null) {
             itemStorage.put(player, new LevelData(itemStack));
@@ -86,7 +86,7 @@ public class Events implements Listener {
 
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
-            ItemStack itemStack = player.getItemInHand();
+            ItemStack itemStack = player.getInventory().getItemInMainHand();
 
             if (!(itemStack == null || itemStack.getType() == Material.AIR || !(Config.isItemEnabled(plugin, itemStack.getType())) ||
                     event.isCancelled() || event.getEntity().hasMetadata("NPC") ||
@@ -153,7 +153,7 @@ public class Events implements Listener {
 
             if (damageEvent.getDamager() instanceof Player) {
                 Player player = (Player) damageEvent.getDamager();
-                ItemStack itemStack = player.getItemInHand();
+                ItemStack itemStack = player.getInventory().getItemInMainHand();
 
                 if (itemStack == null || itemStack.getType() == Material.AIR || Config.isItemEnabled(plugin, itemStack.getType()) ||
                         !Config.ALLOW_STACKS && itemStack.getAmount() > 1) {
@@ -232,7 +232,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        ItemStack itemStack = player.getItemInHand();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
         boolean cancel = false;
 
         if (itemStack != null && itemStack.getType() != Material.AIR && Config.isItemEnabled(plugin, itemStack.getType()) &&
@@ -321,7 +321,7 @@ public class Events implements Listener {
     public void onPlayerEat(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            ItemStack food = player.getItemInHand();
+            ItemStack food = player.getInventory().getItemInMainHand();
             LevelData data = new LevelData(food);
 
             player.setFoodLevel(player.getFoodLevel() + data.getStage().getBonus("food"));
