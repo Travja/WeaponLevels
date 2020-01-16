@@ -1,5 +1,6 @@
 package com.coffeecup.novus.weaponlevels.data;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,7 +14,7 @@ public class LevelEnchantment {
     }
 
     public LevelEnchantment(String id, int level) {
-        this.enchantment = Enchantment.getByName(id);
+        this.enchantment = Enchantment.getByKey(NamespacedKey.minecraft(id));
         this.level = level;
     }
 

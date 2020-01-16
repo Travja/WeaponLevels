@@ -1,5 +1,6 @@
 package com.coffeecup.novus.weaponlevels;
 
+import com.coffeecup.novus.weaponlevels.data.BlockDataManager;
 import com.coffeecup.novus.weaponlevels.data.LevelData;
 import com.coffeecup.novus.weaponlevels.data.LevelDataManager;
 import com.coffeecup.novus.weaponlevels.stages.Stage;
@@ -258,8 +259,8 @@ public class Events implements Listener {
 
             itemStorage.put(player, data);
         }
-		
-		if (!cancel && !event.isCancelled()) {
+
+        if (!cancel && !event.isCancelled()) {
             for (ItemStack stack : event.getBlock().getDrops(itemStack))
                 BlockDataManager.apply(player, event.getBlock(), stack);
         }
