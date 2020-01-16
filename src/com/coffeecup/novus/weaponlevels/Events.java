@@ -53,7 +53,8 @@ public class Events implements Listener {
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (itemStack != null) {
+        if (itemStack != null && (TypeChecker.isArmor(itemStack.getType()) ||
+                TypeChecker.isWeapon(itemStack.getType()) || TypeChecker.isTool(itemStack.getType()))) {
             itemStorage.put(player, new LevelData(itemStack));
         }
     }
@@ -318,16 +319,18 @@ public class Events implements Listener {
         itemStorage.put(player, rodData);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    /*@EventHandler(priority = EventPriority.HIGH)
     public void onPlayerEat(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             ItemStack food = player.getInventory().getItemInMainHand();
-            LevelData data = new LevelData(food);
+            if(food.getType().isEdible()) {
+                LevelData data = new LevelData(food);
 
-            player.setFoodLevel(player.getFoodLevel() + data.getStage().getBonus("food"));
+                player.setFoodLevel(player.getFoodLevel() + data.getStage().getBonus("food"));
+            }
         }
-    }
+    }*/
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFurnaceBurn(FurnaceBurnEvent event) {

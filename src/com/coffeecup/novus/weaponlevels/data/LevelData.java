@@ -3,6 +3,7 @@ package com.coffeecup.novus.weaponlevels.data;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -158,7 +159,8 @@ public class LevelData
 
 		List<String> markDelete = new ArrayList<>();
 		for(String str: lore) {
-			if(str.contains(Config.DESCRIPTION_COLOR + "Level ") || str.contains(Config.DESCRIPTION_COLOR + "EXP: "))
+			if(str.contains(Config.DESCRIPTION_COLOR + "Level ") || str.contains(Config.DESCRIPTION_COLOR + "EXP: ")
+			|| str.equals(ChatColor.BLACK + " " + ChatColor.AQUA + " "))
 				markDelete.add(str);
 		}
 
@@ -167,7 +169,7 @@ public class LevelData
 		}
 
 		if(!lore.isEmpty())
-			lore.add("");
+			lore.add(ChatColor.BLACK + " " + ChatColor.AQUA + " ");
 		
 		lore.add(Config.DESCRIPTION_COLOR + "Level " + level);
 		

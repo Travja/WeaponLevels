@@ -63,7 +63,7 @@ public class Stage
 		{
 			ItemMeta meta = item.getItemMeta();
 			
-			if (meta.hasDisplayName())
+			/*if (meta.hasDisplayName()) // WHY? Why would you do this?
 			{
 				if (ChatColor.stripColor(meta.getDisplayName()).equals(TypeChecker.getInGameName(item.getType())))
 				{
@@ -73,7 +73,7 @@ public class Stage
 			else
 			{
 				meta.setDisplayName(getColor() + TypeChecker.getInGameName(item.getType()));
-			}
+			}*/
 			
 			item.setItemMeta(meta);
 			
