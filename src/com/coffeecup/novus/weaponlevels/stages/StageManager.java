@@ -6,7 +6,6 @@ import com.coffeecup.novus.weaponlevels.type.ItemType;
 import com.coffeecup.novus.weaponlevels.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
 
@@ -63,7 +62,7 @@ public class StageManager
 				String id = split[0];
 				int level = Integer.valueOf(split[1]);
 				
-				list.add(new LevelEnchantment(Enchantment.getByKey(NamespacedKey.minecraft(id)), level));
+				list.add(new LevelEnchantment(Enchantment.getByName(id), level));
 			}
 			catch (NumberFormatException e)
 			{

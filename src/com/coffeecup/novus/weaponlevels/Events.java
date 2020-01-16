@@ -51,7 +51,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.LOWEST)
     public void onAnimate(PlayerAnimationEvent event) {
         Player player = event.getPlayer();
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        ItemStack itemStack = player.getInventory().getItemInHand();
 
         if (itemStack != null && (TypeChecker.isArmor(itemStack.getType()) ||
                 TypeChecker.isWeapon(itemStack.getType()) || TypeChecker.isTool(itemStack.getType()))) {
@@ -88,7 +88,7 @@ public class Events implements Listener {
 
         if (event.getDamager() instanceof Player) {
             Player player = (Player) event.getDamager();
-            ItemStack itemStack = player.getInventory().getItemInMainHand();
+            ItemStack itemStack = player.getInventory().getItemInHand();
 
             if (!(itemStack == null || itemStack.getType() == Material.AIR || !(Config.isItemEnabled(plugin, itemStack.getType())) ||
                     event.isCancelled() || event.getEntity().hasMetadata("NPC") ||
@@ -155,7 +155,7 @@ public class Events implements Listener {
 
             if (damageEvent.getDamager() instanceof Player) {
                 Player player = (Player) damageEvent.getDamager();
-                ItemStack itemStack = player.getInventory().getItemInMainHand();
+                ItemStack itemStack = player.getInventory().getItemInHand();
 
                 if (itemStack == null || itemStack.getType() == Material.AIR || Config.isItemEnabled(plugin, itemStack.getType()) ||
                         !Config.ALLOW_STACKS && itemStack.getAmount() > 1) {
@@ -191,7 +191,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerInteract(PlayerInteractEvent event) {
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getClickedBlock().getType().equals(Material.CRAFTING_TABLE)) {
+            if (event.getClickedBlock().getType().equals(Material.WORKBENCH)) {
                 System.out.println("Stored");
                 craftStorage.put(event.getPlayer(), event.getClickedBlock());
             }
@@ -234,7 +234,7 @@ public class Events implements Listener {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        ItemStack itemStack = player.getInventory().getItemInHand();
         boolean cancel = false;
 
         if (itemStack != null && itemStack.getType() != Material.AIR && Config.isItemEnabled(plugin, itemStack.getType()) &&
@@ -293,7 +293,7 @@ public class Events implements Listener {
                     hook.setBiteChance(hook.getBiteChance() + rodData.getStage().getBonus("fishing"));
                     break;
                 case CAUGHT_FISH:
-                    ItemStack fish = new ItemStack(Material.COD, 1);
+                    ItemStack fish = new ItemStack(Material.RAW_FISH, 1);
                     LevelData fishData = new LevelData(fish);
 
                     fishData.setLevel(Util.getLevelOnCurve(1, rodData.getLevel(), Config.CRAFT_RATIO));

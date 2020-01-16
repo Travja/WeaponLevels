@@ -33,7 +33,7 @@ public class LevelDataManager {
     public static boolean hasExperienceBar(ItemStack item) {
         if (getType(item) == ItemType.ITEM) {
             switch (item.getType()) {
-                case CRAFTING_TABLE:
+                case WORKBENCH:
                 case FURNACE:
                 case BOW:
                 case FISHING_ROD:
