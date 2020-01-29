@@ -41,7 +41,7 @@ public class Events implements Listener {
 
     private HashMap<Player, LevelData> itemStorage = new HashMap<Player, LevelData>();
     private HashMap<Arrow, LevelData> arrowStorage = new HashMap<Arrow, LevelData>();
-//    private HashMap<Player, Block> craftStorage = new HashMap<Player, Block>();
+    //    private HashMap<Player, Block> craftStorage = new HashMap<Player, Block>();
     private List<UUID> spawnStorage = new ArrayList<UUID>();
 
     public Events(WLPlugin wlPlugin) {
