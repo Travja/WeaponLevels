@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -144,7 +145,7 @@ public class LevelData
 	private void writeLevelData()
 	{
 		ItemMeta meta = itemStack.getItemMeta();
-		
+
 		if (meta == null)
 		{
 			return;
@@ -185,6 +186,8 @@ public class LevelData
 	private void createNewLevelData()
 	{
 		type = LevelDataManager.getType(itemStack);
+		if(type == ItemType.ITEM)
+			return;
 		level = 1;
 		experience = 0;
 		

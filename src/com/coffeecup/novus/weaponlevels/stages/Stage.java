@@ -61,22 +61,6 @@ public class Stage
 		}
 		else if (item.hasItemMeta())
 		{
-			ItemMeta meta = item.getItemMeta();
-			
-			/*if (meta.hasDisplayName()) // WHY? Why would you do this?
-			{
-				if (ChatColor.stripColor(meta.getDisplayName()).equals(TypeChecker.getInGameName(item.getType())))
-				{
-					meta.setDisplayName(getColor() + TypeChecker.getInGameName(item.getType()));
-				}
-			}
-			else
-			{
-				meta.setDisplayName(getColor() + TypeChecker.getInGameName(item.getType()));
-			}*/
-			
-			item.setItemMeta(meta);
-			
 			for (LevelEnchantment enchantment : getEnchantments())
 			{
 				enchantment.apply(item);
