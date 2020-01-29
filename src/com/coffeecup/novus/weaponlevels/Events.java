@@ -1,5 +1,6 @@
 package com.coffeecup.novus.weaponlevels;
 
+import com.coffeecup.novus.weaponlevels.data.BlockDataManager;
 import com.coffeecup.novus.weaponlevels.data.LevelData;
 import com.coffeecup.novus.weaponlevels.data.LevelDataManager;
 import com.coffeecup.novus.weaponlevels.stages.Stage;
@@ -40,7 +41,7 @@ public class Events implements Listener {
 
     private HashMap<Player, LevelData> itemStorage = new HashMap<Player, LevelData>();
     private HashMap<Arrow, LevelData> arrowStorage = new HashMap<Arrow, LevelData>();
-    private HashMap<Player, Block> craftStorage = new HashMap<Player, Block>();
+    //    private HashMap<Player, Block> craftStorage = new HashMap<Player, Block>();
     private List<UUID> spawnStorage = new ArrayList<UUID>();
 
     public Events(WLPlugin wlPlugin) {
@@ -52,7 +53,8 @@ public class Events implements Listener {
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
 
-        if (itemStack != null) {
+        if (itemStack != null && (TypeChecker.isArmor(itemStack.getType()) ||
+                TypeChecker.isWeapon(itemStack.getType()) || TypeChecker.isTool(itemStack.getType()))) {
             itemStorage.put(player, new LevelData(itemStack));
         }
     }
@@ -186,46 +188,46 @@ public class Events implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onPlayerInteract(PlayerInteractEvent event) {
-        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
-            if (event.getClickedBlock().getType().equals(Material.CRAFTING_TABLE)) {
-                System.out.println("Stored");
-                craftStorage.put(event.getPlayer(), event.getClickedBlock());
-            }
-        }
-    }
+//    @EventHandler(priority = EventPriority.NORMAL)
+//    public void onPlayerInteract(PlayerInteractEvent event) {
+//        if (event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+//            if (event.getClickedBlock().getType().equals(Material.CRAFTING_TABLE)) {
+//                System.out.println("Stored");
+//                craftStorage.put(event.getPlayer(), event.getClickedBlock());
+//            }
+//        }
+//    }
 
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onCraft(CraftItemEvent event) {
-        Player player = (Player) event.getWhoClicked();
-        ItemStack itemStack = event.getCurrentItem();
-
-        if (!Config.ALLOW_STACKS && itemStack.getAmount() > 1) {
-            return;
-        }
-
-        LevelData item = new LevelData(itemStack);
-        item.setLevel(Util.getLevelOnCurve(1, Util.getMaxLevel(player, LevelDataManager.getType(itemStack)), Config.CRAFT_RATIO));
-        item.update();
-
-        /*Block block = craftStorage.get(player);
-
-        if (block != null) {
-            System.out.println("Added");
-            BlockDataManager.addExperience(block, Config.EXP_PER_HIT);
-        }*/
-    }
+//    @EventHandler(priority = EventPriority.NORMAL)
+//    public void onCraft(CraftItemEvent event) {
+//        Player player = (Player) event.getWhoClicked();
+//        ItemStack itemStack = event.getCurrentItem();
+//
+//        if (!Config.ALLOW_STACKS && itemStack.getAmount() > 1) {
+//            return;
+//        }
+//
+//        LevelData item = new LevelData(itemStack);
+//        item.setLevel(Util.getLevelOnCurve(1, Util.getMaxLevel(player, LevelDataManager.getType(itemStack)), Config.CRAFT_RATIO));
+//        item.update();
+//
+//        Block block = craftStorage.get(player);
+//
+//        if (block != null) {
+//            System.out.println("Added");
+//            BlockDataManager.addExperience(block, Config.EXP_PER_HIT);
+//        }
+//    }
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBlockPlace(BlockPlaceEvent event) {
         if (!event.isCancelled()) {
             Blocks.add(event.getBlock());
 
-            /*Block block = event.getBlock();
+            Block block = event.getBlock();
             ItemStack itemStack = event.getItemInHand();
             LevelData data = new LevelData(itemStack);
-            BlockDataManager.put(block, data);*/
+            BlockDataManager.put(block, data);
         }
     }
 
@@ -258,8 +260,8 @@ public class Events implements Listener {
 
             itemStorage.put(player, data);
         }
-		
-		/*if (!cancel && !event.isCancelled()) {
+
+        if (!cancel && !event.isCancelled()) {
             for (ItemStack stack : event.getBlock().getDrops(itemStack))
                 BlockDataManager.apply(player, event.getBlock(), stack);
         }
@@ -317,16 +319,18 @@ public class Events implements Listener {
         itemStorage.put(player, rodData);
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    /*@EventHandler(priority = EventPriority.HIGH)
     public void onPlayerEat(FoodLevelChangeEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             ItemStack food = player.getInventory().getItemInMainHand();
-            LevelData data = new LevelData(food);
+            if(food.getType().isEdible()) {
+                LevelData data = new LevelData(food);
 
-            player.setFoodLevel(player.getFoodLevel() + data.getStage().getBonus("food"));
+                player.setFoodLevel(player.getFoodLevel() + data.getStage().getBonus("food"));
+            }
         }
-    }
+    }*/
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onFurnaceBurn(FurnaceBurnEvent event) {
@@ -336,7 +340,7 @@ public class Events implements Listener {
         event.setBurnTime(event.getBurnTime() - data.getStage().getBonus("fuel"));
     }
 
-    @EventHandler(priority = EventPriority.HIGH)
+    /*@EventHandler(priority = EventPriority.HIGH)
     public void onFurnaceSmelt(FurnaceSmeltEvent event) {
         ItemStack source = event.getSource();
         ItemStack result = event.getResult();
@@ -345,8 +349,8 @@ public class Events implements Listener {
 
         resultData.setLevel(sourceData.getLevel());
 
-        //BlockDataManager.addExperience(event.getBlock(), Config.EXP_PER_HIT);
-    }
+        BlockDataManager.addExperience(event.getBlock(), Config.EXP_PER_HIT);
+    }*/
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onShootBow(EntityShootBowEvent event) {

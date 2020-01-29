@@ -13,20 +13,20 @@ public class WeaponLevelsAPI
 		return new LevelData(item).getLevel();
 	}
 	
-	/*public static int getLevel(Block block)
+	public static int getLevel(Block block)
 	{
 		return BlockDataManager.getLevel(block);
-	}*/
+	}
 	
 	public static int getExperience(ItemStack item)
 	{
 		return new LevelData(item).getExperience();
 	}
 	
-	/*public static int getExperience(Block block)
+	public static int getExperience(Block block)
 	{
 		return BlockDataManager.getExperience(block);
-	}*/
+	}
 	
 	public static void addExperience(Player player, ItemStack item, int amount)
 	{
